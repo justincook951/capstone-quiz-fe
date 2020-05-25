@@ -1,10 +1,10 @@
 import React from 'react'
 import MainMenu from './MainMenu'
 
-export default function Home() {
+export default function TestTaker() {
     return (
         <div>
-            <h1>Welcome home!</h1>
+            <h1>Take a test</h1>
             <hr/>
             <MainMenu />
         </div>

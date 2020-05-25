@@ -1,4 +1,4 @@
-/*html, body, #app {
+html, body, #app {
     margin: 0;
     height: 100%;
     width: 100%;
@@ -6,12 +6,15 @@
 
 body {
     font-family: Helvetica Neue, sans-serif;
+    background: lightgray;
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 50px;
+    height: 100%;
+    background: #e1e7e8;
 }
 
 .flex-center {
@@ -50,8 +53,7 @@ body {
 
 .reg-button {
     padding: 10px;
-    text-decoration: uppercase;
-    letter-spacing: .25em;
+    letter-spacing: .15em;
     border-radius: 3px;
     border: none;
     font-size: 16px;
@@ -61,11 +63,16 @@ body {
     cursor: pointer;
     text-decoration: none;
     max-width: 200px;
+    max-height: 45px;
+    -webkit-transition: all .2s ease-out;
+    -moz-transition: all .2s ease-out;
+    -o-transition: all .2s ease-out;
+    transition: all .2s ease-out;
 }
 
 .reg-button:hover {
-    color: BLACK;
-    border-color: #DDDDDD;
+    background-color: teal;
+    color: white;
 }
 
 .flex-column-container {
@@ -75,4 +82,36 @@ body {
 
 .flex-column-item {
     text-align: center;
-}*/
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.space-between {
+    justify-content: space-between;
+}
+
+
+.nav-link {
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: none;
+    color: inherit;
+    border: solid 1px;
+    padding: 10px;
+    margin: 10px;
+}
+
+.nav li {
+    margin-right: 10px;
+}
+
+li {
+    list-style-type: none;
+}
+
+.reg-link {
+    padding-left: 5px;
+}
