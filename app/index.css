@@ -64,6 +64,8 @@ body {
     text-decoration: none;
     max-width: 200px;
     max-height: 45px;
+    background-color: teal;
+    color: white;
     -webkit-transition: all .2s ease-out;
     -moz-transition: all .2s ease-out;
     -o-transition: all .2s ease-out;
@@ -71,8 +73,8 @@ body {
 }
 
 .reg-button:hover {
-    background-color: teal;
-    color: white;
+    color: teal;
+    background-color: white;
 }
 
 .flex-column-container {

@@ -4,9 +4,9 @@ import MainMenu from './MainMenu'
 export default function TestMaker() {
     return (
         <div>
-            <h1>Create some questions</h1>
-            <hr/>
             <MainMenu />
+            <hr/>
+            <h1>Create some questions</h1>
         </div>
     )
 }
