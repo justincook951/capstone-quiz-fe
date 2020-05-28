@@ -17,23 +17,29 @@ function MainMenuNav() {
             <nav className='row space-between'>
                 <ul className='row nav'>
                     <li>
-                    <NavLink 
-                        to='/' 
-                        exact
-                        className='nav-link'
-                        activeStyle={activeStyle}>Home</NavLink>
+                        <NavLink 
+                            to='/' 
+                            exact
+                            className='nav-link'
+                            activeStyle={activeStyle}>
+                                Home
+                        </NavLink>
                     </li>
                     <li>
                         <NavLink 
-                            to='/create/test' 
+                            to='/test/create' 
                             className='nav-link'
-                            activeStyle={activeStyle}>Create New Test</NavLink>
+                            activeStyle={activeStyle}>
+                                Create New Test
+                        </NavLink>
                     </li>
                     <li>
                         <NavLink 
-                            to='/get/test' 
+                            to='/test/get' 
                             className='nav-link'
-                            activeStyle={activeStyle}>Take A Test</NavLink>
+                            activeStyle={activeStyle}>
+                                Take A Test
+                        </NavLink>
                     </li>
                 </ul>
             </nav>

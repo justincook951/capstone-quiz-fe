@@ -6,7 +6,7 @@ export default function Demo() {
         <div>
             <h1>This is the demo page!</h1>
             <NavLink 
-                to='/create/test' 
+                to='/test/create' 
                 className='nav-link'>This is a broken link</NavLink>
         </div>
     )

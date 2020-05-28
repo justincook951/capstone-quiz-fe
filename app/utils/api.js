@@ -16,8 +16,12 @@ export function fetchSessionsByUser(userId) {
     let samplePromise = new Promise((resolve, reject) => {
         setTimeout( function() {
             resolve([
-                {id: 1, text: 'Hello! 1'},
-                {id: 2, text: 'Hello! 2' }
+                {sessionId: 1, name: 'Session 1', lastAccessed: "2 Days"},
+                {sessionId: 2, name: 'Session 2', lastAccessed: "Today" },
+                {sessionId: 3, name: 'Session 3', lastAccessed: "Today" },
+                {sessionId: 4, name: 'Session 4', lastAccessed: "Today" },
+                {sessionId: 5, name: 'Session 5', lastAccessed: "Today" },
+                {sessionId: 6, name: 'Session 6', lastAccessed: "Today" },
             ])
         }, 1000)
     })
