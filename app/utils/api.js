@@ -34,11 +34,45 @@ export function fetchSessionsByUser(userId) {
 }
 
 export function fetchQuestionsBySession(sessionId) {
-    // Emulate the same material, for now.
-    return fetchSessionsByUser(sessionId);
+    let samplePromise = new Promise((resolve, reject) => {
+        setTimeout( function() {
+            resolve([
+                {
+                    questionId: 1, 
+                    questionText: "Question 1 text", 
+                    questionExplanation: "This is the right answer.", 
+                    questionType: "multiple choice",
+                    answers: [
+                        {answerId: 1, answerText: "Answer text 1", isCorrect: false},
+                        {answerId: 2, answerText: "Answer text 2 (c)", isCorrect: true},
+                        {answerId: 3, answerText: "Answer text 3", isCorrect: false},
+                        {answerId: 4, answerText: "Answer text 4", isCorrect: false},
+                    ]
+                },
+                {
+                    questionId: 2, 
+                    questionText: "Question 2 text", 
+                    questionExplanation: "This is the right answer. For reasons.", 
+                    questionType: "multiple choice",
+                    answers: [
+                        {answerId: 1, answerText: "Answer text 1", isCorrect: false},
+                        {answerId: 2, answerText: "Answer text 2", isCorrect: false},
+                        {answerId: 3, answerText: "Answer text 3 (c)", isCorrect: true},
+                        {answerId: 4, answerText: "Answer text 4", isCorrect: false},
+                    ]
+                },
+            ])
+        }, 1000)
+    });
+
+    return samplePromise
+        //.then((res) => res.json())
+        .then((data) => {
+            return data;
+        })
 }
 
 export function generateNewTest() {
     // Emulate the same material, for now.
-    return fetchSessionsByUser("123");
+    return fetchQuestionsBySession("123");
 }

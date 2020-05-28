@@ -3,7 +3,7 @@ import MainMenu from './MainMenu'
 import { fetchSessionsByUser } from '../utils/api'
 import * as actiontype from '../utils/action_types'
 import Loading from './Loading'
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
 function testTakerReducer(state, action) {
     if (action.type === actiontype.SUCCESS) {
@@ -30,8 +30,6 @@ function loadTest(session, history) {
 
 function SessionsGrid({ sessions }) {
     const history = useHistory();
-    console.log("Sessions grid")
-    console.log(sessions)
     return (
         <React.Fragment>
             <li className='btn-style' onClick={() => loadTest('new', history)}>

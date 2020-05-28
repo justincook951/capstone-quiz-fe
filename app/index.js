@@ -1,12 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
-import AuthedContext, { AuthedProvider } from './contexts/authed'
-import { BrowserRouter as Router, Route, Switch, Redirect, useHistory } from 'react-router-dom'
+import { AuthedProvider } from './contexts/authed'
+import { BrowserRouter as Router, Route, Switch, NavLink, Link } from 'react-router-dom'
 import Loading from './components/Loading'
 import Home from './components/Home'
 import Demo from './components/Demo'
-import { NavLink } from 'react-router-dom'
 import TestMaker from './components/TestMaker'
 import TestTaker from './components/TestTaker'
 import Test from './components/Test'
@@ -38,10 +37,14 @@ function App()  {
             <Router>
                 <AuthedProvider value={authed}>
                     <div className='row space-between'>
-                        <h1>Quiz Engine 2.0</h1>
+                        <Link
+                            to='/'
+                        >
+                            <img className='logo' src='/app/assets/logo.png' alt='Quiz Engine' />
+                        </Link>
                         <button className='btn btn-style' onClick={toggleAuthed}>{!authed ? 'Login' : 'Logout'}</button>
                     </div>
-                    <h3><i>Testing, made better</i></h3>
+                    <h3><i>Learning, made better</i></h3>
                     <React.Suspense fallback={<Loading/>} >
                         
                         <Switch>

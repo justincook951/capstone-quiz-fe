@@ -19,8 +19,8 @@ function answerReducer(state, action) {
     }
 }
 
-export default function Answer() {
+export default function Answer({ answerText, isCorrect }) {
     return (
-        <p>"This is an answer"</p>
+        <p>{answerText}: {isCorrect ? "correct" : "incorrect"}</p>
     )
 }
