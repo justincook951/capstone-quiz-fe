@@ -39,26 +39,26 @@ export function fetchQuestionsBySession(sessionId) {
             resolve([
                 {
                     questionId: 1, 
-                    questionText: "Question 1 text", 
+                    questionText: "What is your favorite color?", 
                     questionExplanation: "This is the right answer.", 
                     questionType: "multiple choice",
                     answers: [
-                        {answerId: 1, answerText: "Answer text 1", isCorrect: false},
-                        {answerId: 2, answerText: "Answer text 2 (c)", isCorrect: true},
-                        {answerId: 3, answerText: "Answer text 3", isCorrect: false},
-                        {answerId: 4, answerText: "Answer text 4", isCorrect: false},
+                        {answerId: 1, answerText: "Blue", isCorrect: false},
+                        {answerId: 2, answerText: "No, Yellowwwwwww", isCorrect: true},
+                        {answerId: 3, answerText: "What?", isCorrect: false},
+                        {answerId: 4, answerText: "I don't like Spam", isCorrect: false},
                     ]
                 },
                 {
                     questionId: 2, 
-                    questionText: "Question 2 text", 
+                    questionText: "What is the average air speed velocity of a laden swallow?", 
                     questionExplanation: "This is the right answer. For reasons.", 
                     questionType: "multiple choice",
                     answers: [
-                        {answerId: 1, answerText: "Answer text 1", isCorrect: false},
-                        {answerId: 2, answerText: "Answer text 2", isCorrect: false},
-                        {answerId: 3, answerText: "Answer text 3 (c)", isCorrect: true},
-                        {answerId: 4, answerText: "Answer text 4", isCorrect: false},
+                        {answerId: 1, answerText: "Where did you get the coconuts?", isCorrect: false},
+                        {answerId: 2, answerText: "I told them he's already got one", isCorrect: false},
+                        {answerId: 3, answerText: "'tis but a fleshwound", isCorrect: true},
+                        {answerId: 4, answerText: "<vague MP reference>", isCorrect: false},
                     ]
                 },
             ])

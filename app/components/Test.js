@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Question from './Question'
 import {fetchQuestionsBySession, generateNewTest} from '../utils/api'
 import * as actiontype from '../utils/action_types'
@@ -11,7 +11,8 @@ function testReducer(state, action) {
     if (action.type === actiontype.SUCCESS) {
         return {
             error: null,
-            questions: action.response
+            questions: action.response,
+            displayQuestion: action.response[0].questionId
         }
     }
     else if (action.type === actiontype.FAILURE) {
@@ -32,53 +33,72 @@ export default function Test() {
         {error: null}
     )
     const { sessionId } = useParams();
+    const [displayQuestion, updateDisplayQuestion] = useState(1);
     // Fetch all questions for a given session for this user
     if (sessionId === 'new') {
         React.useEffect(() => {
-            console.log("Generating a new test");
             generateNewTest()
                 .then((response) => {
-                    console.log(response);
                     dispatch({ type: actiontype.SUCCESS, state, response })
+                    updateDisplayQuestion(state.questionId[0]);
                 })
                 .catch((err) => console.log(err));
         }, [])
     }
     else {
         React.useEffect(() => {
-            console.log(`fetching by ID ${sessionId}`);
             fetchQuestionsBySession(sessionId)
                 .then((response) => {
-                    console.log('got response in fetch')
-                    console.log(response);
                     dispatch({ type: actiontype.SUCCESS, state, response })
                 })
                 .catch((err) => console.log(err));
         }, [])
     }
-    
+    const goToQuestion = (targetQuestionId) => {
+        updateDisplayQuestion(targetQuestionId);
+    }
+    const getNextQuestion = (currentQuestionId) => {
+        goToQuestion(currentQuestionId + 1);
+    }
+    const getPreviousQuestion = (currentQuestionId) => {
+        goToQuestion(currentQuestionId - 1);
+    }
     return (
         <React.Fragment>
             <MainMenu />
             <hr/>
             <div className='questionsContainer'>
+            {state.error
+                ? <h1>{error}</h1> 
+                : !state.questions
+                    ? <Loading text='Getting questions' />
+                    : null
+            } 
                 <ul>
                     {state.questions
-                        ? state.questions.map((question, index) => {
-                            return (
-                                <li key={question.questionId}>
-                                    <Question 
-                                        questionText={question.questionText}
-                                        questionExplanation={question.questionExplanation}
-                                        questionType={question.questionType}
-                                        inbAnswers={question.answers}
-                                    />
-                                </li>
-                            )
+                        ? state.questions.map((question) => {
+                            if (question.questionId === displayQuestion) {
+                                return (
+                                    <React.Fragment>
+                                        <h3 key={`header-${question.questionId}`}>Question {displayQuestion} of {state.questions.length}</h3>
+                                        <Question 
+                                            questionText={question.questionText}
+                                            questionExplanation={question.questionExplanation}
+                                            questionType={question.questionType}
+                                            inbAnswers={question.answers}
+                                            previousQuestion={() => getPreviousQuestion(question.questionId)}
+                                            nextQuestion={() => getNextQuestion(question.questionId)}
+                                            previousEnabled={question.questionId !== 1}
+                                            nextEnabled={question.questionId !== state.questions.length}
+                                        />
+                                    </React.Fragment>
+                                )
+                            }
+                            else {
+                                return null;
+                            }
                         }) 
-                        : state.error 
-                            ? <h1>{error}</h1> 
-                            : <Loading text='Getting questions' />
+                        : null
                     }
                 </ul>
             </div>
