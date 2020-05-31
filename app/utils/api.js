@@ -40,7 +40,7 @@ export function fetchQuestionsBySession(sessionId) {
                 {
                     questionId: 1, 
                     questionText: "What is your favorite color?", 
-                    questionExplanation: "This is the right answer.", 
+                    questionExplanation: "Obviously, No Yellow is the correct answer because I said it was. Duh.", 
                     questionType: "multiple choice",
                     answers: [
                         {answerId: 1, answerText: "Blue", isCorrect: false},
@@ -52,13 +52,13 @@ export function fetchQuestionsBySession(sessionId) {
                 {
                     questionId: 2, 
                     questionText: "What is the average air speed velocity of a laden swallow?", 
-                    questionExplanation: "This is the right answer. For reasons.", 
+                    questionExplanation: "Nobody suspects the Spanish Inquisition!", 
                     questionType: "multiple choice",
                     answers: [
                         {answerId: 1, answerText: "Where did you get the coconuts?", isCorrect: false},
                         {answerId: 2, answerText: "I told them he's already got one", isCorrect: false},
-                        {answerId: 3, answerText: "'tis but a fleshwound", isCorrect: true},
-                        {answerId: 4, answerText: "<vague MP reference>", isCorrect: false},
+                        {answerId: 3, answerText: "The Spanish Inquisition", isCorrect: true},
+                        {answerId: 4, answerText: "'tis but a fleshwound", isCorrect: false},
                     ]
                 },
             ])

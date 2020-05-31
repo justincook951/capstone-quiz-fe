@@ -79,18 +79,20 @@ export default function Test() {
                         ? state.questions.map((question) => {
                             if (question.questionId === displayQuestion) {
                                 return (
-                                    <React.Fragment>
-                                        <h3 key={`header-${question.questionId}`}>Question {displayQuestion} of {state.questions.length}</h3>
-                                        <Question 
-                                            questionText={question.questionText}
-                                            questionExplanation={question.questionExplanation}
-                                            questionType={question.questionType}
-                                            inbAnswers={question.answers}
-                                            previousQuestion={() => getPreviousQuestion(question.questionId)}
-                                            nextQuestion={() => getNextQuestion(question.questionId)}
-                                            previousEnabled={question.questionId !== 1}
-                                            nextEnabled={question.questionId !== state.questions.length}
-                                        />
+                                    <React.Fragment key={`fragment-${question.questionId}`}>
+                                        <h3>Question {displayQuestion} of {state.questions.length}</h3>
+                                        <li>
+                                            <Question 
+                                                questionText={question.questionText}
+                                                questionExplanation={question.questionExplanation}
+                                                questionType={question.questionType}
+                                                inbAnswers={question.answers}
+                                                previousQuestion={() => getPreviousQuestion(question.questionId)}
+                                                nextQuestion={() => getNextQuestion(question.questionId)}
+                                                previousEnabled={question.questionId !== 1}
+                                                nextEnabled={question.questionId !== state.questions.length}
+                                            />
+                                        </li>
                                     </React.Fragment>
                                 )
                             }
