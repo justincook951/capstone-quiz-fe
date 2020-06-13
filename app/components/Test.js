@@ -1,68 +1,84 @@
 import React, { useState } from 'react'
 import Question from './Question'
-import {fetchQuestionsBySession, generateNewTest} from '../utils/api'
+import { fetchNextQuestionBySession, generateNewTest, removeQuestionFromList, addQuestionTolist } from '../utils/api'
 import * as actiontype from '../utils/action_types'
 import { useParams} from "react-router";
 import MainMenu from './MainMenu';
 import Loading from './Loading';
+import { array } from 'prop-types';
 
 // This isn't a "test reducer", it's a "reducer for the test component" ;) that's confusing!
 function testReducer(state, action) {
-    if (action.type === actiontype.SUCCESS) {
-        return {
-            error: null,
-            questions: action.response,
-            displayQuestion: action.response[0].questionId
-        }
-    }
-    else if (action.type === actiontype.FAILURE) {
-        return {
+    switch (action.type) {
+        case actiontype.SUCCESS:
+            return {
+                error: null,
+                question: action.response.question,
+                totalQuestionCount: action.response.questionCount
+            }
+            // Semantic deliciousness
+            break;
+        case actiontype.FAILURE:
+            return {
             
-        }
-    }
-    else if (action.type === actiontype.ERROR) {
-        return {
+            }
+            break;
+        case actiontype.ERROR:
+            return {
 
-        }
+            }
+            break;
+        case actiontype.RESET:
+            return {
+                error: null
+            }
+        default:
+            throw new Error(`Action Type ${action.type} not implemented`);
     }
 }
 
 export default function Test() {
+    const [questionData, updateQuestionData] = React.useState(3)
     const [state, dispatch] = React.useReducer(
         testReducer,
         {error: null}
     )
     const { sessionId } = useParams();
-    const [displayQuestion, updateDisplayQuestion] = useState(1);
     // Fetch all questions for a given session for this user
     if (sessionId === 'new') {
         React.useEffect(() => {
             generateNewTest()
                 .then((response) => {
                     dispatch({ type: actiontype.SUCCESS, state, response })
-                    updateDisplayQuestion(state.questionId[0]);
                 })
                 .catch((err) => console.log(err));
-        }, [])
+        }, [questionData])
     }
     else {
         React.useEffect(() => {
-            fetchQuestionsBySession(sessionId)
+            dispatch({ type:actiontype.RESET })
+            fetchNextQuestionBySession(sessionId)
                 .then((response) => {
                     dispatch({ type: actiontype.SUCCESS, state, response })
                 })
                 .catch((err) => console.log(err));
-        }, [])
+        }, [questionData])
     }
-    const goToQuestion = (targetQuestionId) => {
-        updateDisplayQuestion(targetQuestionId);
+
+    const updateTest = (action) => {
+        switch (action.type) {
+            case actiontype.REQUEUE:
+                addQuestionTolist(action.question)
+                break;
+            case actiontype.REMOVE:
+                removeQuestionFromList(action.questionId)
+                break;
+            default:
+                throw new Error("Unsupported action call in updateTest")
+        }
     }
-    const getNextQuestion = (currentQuestionId) => {
-        goToQuestion(currentQuestionId + 1);
-    }
-    const getPreviousQuestion = (currentQuestionId) => {
-        goToQuestion(currentQuestionId - 1);
-    }
+
+    let question = (state.question ? state.question : null);
     return (
         <React.Fragment>
             <MainMenu />
@@ -70,36 +86,27 @@ export default function Test() {
             <div className='questionsContainer'>
             {state.error
                 ? <h1>{error}</h1> 
-                : !state.questions
-                    ? <Loading text='Getting questions' />
+                : !state.question
+                    ? <Loading text='Getting question' />
                     : null
             } 
                 <ul>
-                    {state.questions
-                        ? state.questions.map((question) => {
-                            if (question.questionId === displayQuestion) {
-                                return (
-                                    <React.Fragment key={`fragment-${question.questionId}`}>
-                                        <h3>Question {displayQuestion} of {state.questions.length}</h3>
-                                        <li>
-                                            <Question 
-                                                questionText={question.questionText}
-                                                questionExplanation={question.questionExplanation}
-                                                questionType={question.questionType}
-                                                inbAnswers={question.answers}
-                                                previousQuestion={() => getPreviousQuestion(question.questionId)}
-                                                nextQuestion={() => getNextQuestion(question.questionId)}
-                                                previousEnabled={question.questionId !== 1}
-                                                nextEnabled={question.questionId !== state.questions.length}
-                                            />
-                                        </li>
-                                    </React.Fragment>
-                                )
-                            }
-                            else {
-                                return null;
-                            }
-                        }) 
+                    {state.question
+                        ?
+                        <React.Fragment key={`fragment-${question.questionId}`}>
+                            <h3>Question Counter Broken</h3>
+                            <li>
+                                <Question 
+                                    inbquestionId={question.questionId}
+                                    inbquestionText={question.questionText}
+                                    inbquestionExplanation={question.questionExplanation}
+                                    inbAnswers={question.answers}
+                                    nextQuestion={updateQuestionData}
+                                    nextEnabled={true}
+                                    onSubmitFunc={(action) => updateTest(action)}
+                                />
+                            </li>
+                        </React.Fragment>
                         : null
                     }
                 </ul>

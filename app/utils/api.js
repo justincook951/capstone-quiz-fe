@@ -1,6 +1,30 @@
 
 // This doesn't work yet :( good luck
 const apiUrlBase = process.env.API_URL;
+var questionsList = [
+    {
+        questionId: 1, 
+        questionText: "What is your favorite color?", 
+        questionExplanation: "Obviously, No Yellow is the correct answer because I said it was. Duh.", 
+        answers: [
+            {answerId: 1, answerText: "Blue", isCorrect: false},
+            {answerId: 2, answerText: "No, Yellowwwwwww", isCorrect: true},
+            {answerId: 3, answerText: "What?", isCorrect: false},
+            {answerId: 4, answerText: "I don't like Spam", isCorrect: false},
+        ]
+    },
+    {
+        questionId: 2, 
+        questionText: "What is the average air speed velocity of a laden swallow?", 
+        questionExplanation: "Nobody suspects the Spanish Inquisition!", 
+        answers: [
+            {answerId: 1, answerText: "Where did you get the coconuts?", isCorrect: false},
+            {answerId: 2, answerText: "I told them he's already got one", isCorrect: false},
+            {answerId: 3, answerText: "The Spanish Inquisition", isCorrect: true},
+            {answerId: 4, answerText: "'tis but a fleshwound", isCorrect: false},
+        ]
+    },
+]
 
 
 export function fetchSessionsByUser(userId) {
@@ -33,35 +57,10 @@ export function fetchSessionsByUser(userId) {
         })
 }
 
-export function fetchQuestionsBySession(sessionId) {
+export function fetchNextQuestionBySession(sessionId) {
     let samplePromise = new Promise((resolve, reject) => {
         setTimeout( function() {
-            resolve([
-                {
-                    questionId: 1, 
-                    questionText: "What is your favorite color?", 
-                    questionExplanation: "Obviously, No Yellow is the correct answer because I said it was. Duh.", 
-                    questionType: "multiple choice",
-                    answers: [
-                        {answerId: 1, answerText: "Blue", isCorrect: false},
-                        {answerId: 2, answerText: "No, Yellowwwwwww", isCorrect: true},
-                        {answerId: 3, answerText: "What?", isCorrect: false},
-                        {answerId: 4, answerText: "I don't like Spam", isCorrect: false},
-                    ]
-                },
-                {
-                    questionId: 2, 
-                    questionText: "What is the average air speed velocity of a laden swallow?", 
-                    questionExplanation: "Nobody suspects the Spanish Inquisition!", 
-                    questionType: "multiple choice",
-                    answers: [
-                        {answerId: 1, answerText: "Where did you get the coconuts?", isCorrect: false},
-                        {answerId: 2, answerText: "I told them he's already got one", isCorrect: false},
-                        {answerId: 3, answerText: "The Spanish Inquisition", isCorrect: true},
-                        {answerId: 4, answerText: "'tis but a fleshwound", isCorrect: false},
-                    ]
-                },
-            ])
+            resolve({question: questionsList[0], questionCount: questionsList.length})
         }, 1000)
     });
 
@@ -72,7 +71,19 @@ export function fetchQuestionsBySession(sessionId) {
         })
 }
 
+export function removeQuestionFromList() {
+    // User is only dealing with the first question in the list; just remove index 1
+    questionsList.shift();
+}
+
+export function addQuestionTolist(question, count) {
+    // i is 1 because if they need to repeat the question only once, it's already on the list. Just shuffle the results :)
+    for (let i=1; i < count; i++) {
+        questionsList.push(question);
+    }
+}
+
 export function generateNewTest() {
     // Emulate the same material, for now.
-    return fetchQuestionsBySession("123");
+    return fetchNextQuestionBySession("123");
 }

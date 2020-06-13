@@ -1,39 +1,53 @@
 import React from 'react'
 import Answer from './Answer'
 import PropTypes from 'prop-types'
-
-function shuffleArray(array, arrayShuffled, changeArrayShuffled) {
-    if (!arrayShuffled) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        changeArrayShuffled(true);
-    }
-    return array;
-}
+import * as actiontype from '../utils/action_types'
+import { shuffleArray } from '../utils/generic_functions'
 
 export default function Question({ 
-    questionId, 
-    questionText, 
-    questionExplanation, 
-    questionType, 
+    inbquestionId, 
+    inbquestionText, 
+    inbquestionExplanation, 
     inbAnswers,
-    previousQuestion,
     nextQuestion,
-    previousEnabled,
-    nextEnabled }
+    nextEnabled,
+    onSubmitFunc }
 ){
     
     const [newestAnswer, changeNewestAnswer] = React.useState(null);
     const [oldestAnswer, changeOldestAnswer] = React.useState(null);
     const [displayExplanation, changeDisplayExplanation] = React.useState(false);
     const [displayAnswers, changeDisplayAnswers] = React.useState(false);
-    const [arrayShuffled, changeArrayShuffled] = React.useState(false)
+    const [arrayShuffled, changeArrayShuffled] = React.useState(false);
+    const [questionId,] = React.useState(inbquestionId);
+    const [questionText,] = React.useState(inbquestionText);
+    const [questionExplanation,] = React.useState(inbquestionExplanation);
     const randomOrderAnswers = React.useRef(shuffleArray(inbAnswers, arrayShuffled, changeArrayShuffled));
     const checkAnswer = () => {
         changeDisplayAnswers(true);
         changeDisplayExplanation(true);
+        let fullQuestionObj = {
+            questionId: questionId,
+            questionText: questionText,
+            questionExplanation: questionExplanation,
+            answers: displayAnswers
+        }
+        if (newestAnswer.isCorrect && oldestAnswer.isCorrect) {
+            // User got the answer correct
+            onSubmitFunc({ type: actiontype.REMOVE, questionId: questionId });
+        }
+        else if (newestAnswer.isCorrect || oldestAnswer.isCorrect) {
+            // User got the answer half correct - add to question queue 1x
+            onSubmitFunc({ type: actiontype.REQUEUE, number: 1, question: fullQuestionObj });
+        }
+        else if (newestAnswer.answerId === -1) {
+            // User chose "I don't know" - add to question queue 2x
+            onSubmitFunc({ type: actiontype.REQUEUE, number: 2, question: fullQuestionObj });
+        }
+        else {
+            // User got the answer completely wrong - add to question queue 3x
+            onSubmitFunc({ type: actiontype.REQUEUE, number: 3, question: fullQuestionObj });
+        }
     }
     const chooseAnswer = (inbAnswer) => {
         /*
@@ -138,11 +152,7 @@ export default function Question({
                     onClick={checkAnswer}>Submit</button>
                 <button 
                     className="btn btn-style"
-                    onClick={previousQuestion} 
-                    disabled={!previousEnabled} >Previous</button>
-                <button 
-                    className="btn btn-style"
-                    onClick={nextQuestion}
+                    onClick={() => nextQuestion(Math.random() * 10)}
                     disabled={!nextEnabled} >Next</button>
             </div>
         </React.Fragment>
@@ -152,6 +162,6 @@ export default function Question({
 Question.propTypes = {
     questionText: PropTypes.string.isRequired,
     questionExplanation: PropTypes.string.isRequired,
-    questionType: PropTypes.string.isRequired,
-    inbAnswers: PropTypes.array.isRequired
+    inbAnswers: PropTypes.array.isRequired,
+    nextQuestion: PropTypes.func.isRequired
 }
