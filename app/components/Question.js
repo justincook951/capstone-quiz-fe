@@ -160,8 +160,8 @@ export default function Question({
 }
 
 Question.propTypes = {
-    questionText: PropTypes.string.isRequired,
-    questionExplanation: PropTypes.string.isRequired,
+    inbquestionText: PropTypes.string.isRequired,
+    inbquestionExplanation: PropTypes.string.isRequired,
     inbAnswers: PropTypes.array.isRequired,
     nextQuestion: PropTypes.func.isRequired
 }

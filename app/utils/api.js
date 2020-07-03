@@ -1,6 +1,4 @@
-
-// This doesn't work yet :( good luck
-const apiUrlBase = process.env.API_URL;
+const apiUrlBase = "https://localhost:44336";
 var questionsList = [
     {
         questionId: 1, 
@@ -86,4 +84,38 @@ export function addQuestionTolist(question, count) {
 export function generateNewTest() {
     // Emulate the same material, for now.
     return fetchNextQuestionBySession("123");
+}
+
+export function fetchAllUsers() {
+    const endpoint = window.encodeURI(`${apiUrlBase}/api/Users`);
+    console.log("Fetching from " + endpoint)
+
+    return fetch(endpoint)
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data)
+            return data;
+        })
+        .catch(err => console.log(err));
+}
+
+export function registerUser({firstName, lastName, username, password}) {
+    const endpoint = window.encodeURI(`${apiUrlBase}/api/Users`);
+
+    return fetch(endpoint, {
+        method: "POST",
+        body: JSON.stringify({
+            "username": username,
+            "password":password,
+            "firstName": firstName,
+            "lastName": lastName,
+            "isAdmin": false
+        }),
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        }
+    })
+        .then(response => response.json()) 
+        .then(json => { return json })
+        .catch(err => console.log(err));
 }

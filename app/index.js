@@ -6,6 +6,8 @@ import { BrowserRouter as Router, Route, Switch, NavLink, Link } from 'react-rou
 import Loading from './components/Loading'
 import Home from './components/Home'
 import Demo from './components/Demo'
+import Login from './components/Login'
+import Register from './components/Register'
 import TestMaker from './components/TestMaker'
 import TestTaker from './components/TestTaker'
 import Test from './components/Test'
@@ -23,7 +25,11 @@ function authedPaths() {
 
 function notAuthedPaths() {
     return (
-        <Route exact path='/' component={Demo} />
+        <React.Fragment>
+            <Route exact path='/' component={Demo} />
+            <Route exact path='/login' component={Login} />
+            <Route exact path='/register' component={Register} />
+        </React.Fragment>
     )
 }
 
@@ -42,9 +48,24 @@ function App()  {
                         >
                             <img className='logo' src='/app/assets/logo.png' alt='Quiz Engine' />
                         </Link>
-                        <button className='btn btn-style' onClick={toggleAuthed}>{!authed ? 'Login' : 'Logout'}</button>
+                        {!authed
+                            ? <React.Fragment>
+                                <NavLink 
+                                    to='/login' 
+                                    className='btn btn-style'>
+                                        Login
+                                </NavLink>
+                                <NavLink 
+                                    to='/register' 
+                                    className='btn btn-style'>
+                                        Register
+                                    </NavLink>
+                                </React.Fragment>
+                            : <button className='btn btn-style' onClick={toggleAuthed}>Logout</button>}
+                        
                     </div>
                     <h3><i>Learning, made better</i></h3>
+                    <hr/>
                     <React.Suspense fallback={<Loading/>} >
                         
                         <Switch>

@@ -5,7 +5,6 @@ import * as actiontype from '../utils/action_types'
 import { useParams} from "react-router";
 import MainMenu from './MainMenu';
 import Loading from './Loading';
-import { array } from 'prop-types';
 
 // This isn't a "test reducer", it's a "reducer for the test component" ;) that's confusing!
 function testReducer(state, action) {

@@ -218,3 +218,32 @@ li {
     float: left;
     margin-right: 25px;
 }
+
+.register-container {
+    width: 40%;
+    margin: 0 auto;
+    background: lightgray;
+}
+
+.text-input {
+    width: 100%;
+    margin-left: 10px;
+}
+
+.input-fill {
+    width: 88%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+}
+
+.warning-text {
+    color: rgb(172, 5, 5);
+    font-weight: 120;
+}
+
+.reqd::after {
+    content: "*";
+    color: rgb(172, 5, 5);
+}
