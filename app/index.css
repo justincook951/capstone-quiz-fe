@@ -94,7 +94,7 @@ body {
     min-height: 35px;
 }
 
-.btn-style:hover:enabled {
+.btn-style:hover:not([disabled]) {
     color: teal;
     background-color: white;
 }

@@ -1,7 +1,6 @@
 import React from 'react'
 import { registerUser } from '../utils/api'
 import Loading from './Loading';
-import sleep from '../utils/generic_functions'
 
 function registerReducer(state, action) {
     if (action.type === 'success') {

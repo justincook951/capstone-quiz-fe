@@ -1,5 +1,4 @@
 import React from 'react'
-import AuthedContext from '../contexts/authed'
 import Login from './Login'
 import { NavLink } from 'react-router-dom'
 
@@ -8,7 +7,7 @@ const activeStyle = {
 }
 
 function MainMenuNav() {
-    const authed = React.useContext(AuthedContext)
+    const authed = true;
     if (!authed) {
         return (<Login />)
     }

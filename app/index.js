@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
-import { AuthedProvider } from './contexts/authed'
 import { BrowserRouter as Router, Route, Switch, NavLink, Link } from 'react-router-dom'
 import Loading from './components/Loading'
 import Home from './components/Home'
@@ -23,66 +22,68 @@ function authedPaths() {
     )
 }
 
-function notAuthedPaths() {
+function notAuthedPaths(setAuthed) {
     return (
         <React.Fragment>
             <Route exact path='/' component={Demo} />
-            <Route exact path='/login' component={Login} />
+            <Route exact path='/login' >
+                <Login 
+                    authedFunc={(newVal) => setAuthed(newVal)} />
+            </Route>
             <Route exact path='/register' component={Register} />
         </React.Fragment>
     )
 }
 
 function App()  {
-    const [authed, setAuthed] = React.useState(true);
+    const [authed, setAuthed] = React.useState(false);
     const toggleAuthed = (() => {
         setAuthed((authed) => authed = !authed)
     })
     return (
         <div className='container'>
             <Router>
-                <AuthedProvider value={authed}>
-                    <div className='row space-between'>
-                        <Link
-                            to='/'
-                        >
-                            <img className='logo' src='/app/assets/logo.png' alt='Quiz Engine' />
-                        </Link>
-                        {!authed
-                            ? <React.Fragment>
-                                <NavLink 
-                                    to='/login' 
-                                    className='btn btn-style'>
-                                        Login
+                <div className='row space-between'>
+                    <Link
+                        to='/'
+                        className='partial-fill'
+                    >
+                        <img className='logo' src='/app/assets/logo.png' alt='Quiz Engine' />
+                    </Link>
+                    {!authed
+                        ? <React.Fragment>
+                            <NavLink 
+                                to='/login' 
+                                className='btn btn-style'>
+                                    Login
+                            </NavLink>
+                            <NavLink 
+                                to='/register' 
+                                className='btn btn-style'>
+                                    Register
                                 </NavLink>
-                                <NavLink 
-                                    to='/register' 
-                                    className='btn btn-style'>
-                                        Register
-                                    </NavLink>
-                                </React.Fragment>
-                            : <button className='btn btn-style' onClick={toggleAuthed}>Logout</button>}
+                            </React.Fragment>
+                        : <button className='btn btn-style' onClick={toggleAuthed}>Logout</button>}
+                    
+                </div>
+                <h3><i>Learning, made better</i></h3>
+                <hr/>
+                <React.Suspense fallback={<Loading/>} >
+                    
+                    <Switch>
+                        {authed === true 
+                            ? authedPaths()
+                            : notAuthedPaths(setAuthed)
+                        }
                         
-                    </div>
-                    <h3><i>Learning, made better</i></h3>
-                    <hr/>
-                    <React.Suspense fallback={<Loading/>} >
-                        
-                        <Switch>
-                            {authed === true 
-                                ? authedPaths()
-                                : notAuthedPaths()
-                            }
-                            
-                            <Route render={() => <h1>Could not locate page! 
-                                <NavLink 
-                                    to='/' 
-                                    exact
-                                    className='reg-link'>Return home.</NavLink>
-                                </h1>} />
-                        </Switch>                        
-                    </React.Suspense>
-                </AuthedProvider>
+                        <Route render={() => <h1>Could not locate page! 
+                            <NavLink 
+                                to='/' 
+                                exact
+                                className='reg-link'>Return home.</NavLink>
+                            </h1>} />
+                    </Switch>                        
+                </React.Suspense>
             </Router>
         </div>
     )

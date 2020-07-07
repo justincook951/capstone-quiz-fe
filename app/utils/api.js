@@ -1,4 +1,4 @@
-const apiUrlBase = "https://localhost:44336";
+const apiUrlBase = "https://capstonequizapi20200705171512.azurewebsites.net";
 var questionsList = [
     {
         questionId: 1, 
@@ -88,7 +88,6 @@ export function generateNewTest() {
 
 export function fetchAllUsers() {
     const endpoint = window.encodeURI(`${apiUrlBase}/api/Users`);
-    console.log("Fetching from " + endpoint)
 
     return fetch(endpoint)
         .then((res) => res.json())
@@ -116,6 +115,24 @@ export function registerUser({firstName, lastName, username, password}) {
         }
     })
         .then(response => response.json()) 
-        .then(json => { return json })
+        .then(json => { console.log(json);return json })
+        .catch(err => console.log(err));
+}
+
+export function getToken({username, password}) {
+    const endpoint = window.encodeURI(`${apiUrlBase}/api/Token`);
+
+    return fetch(endpoint, {
+        method: "POST",
+        body: JSON.stringify({
+            "username": username,
+            "password":password
+        }),
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        }
+    })
+        .then(response => response.json()) 
+        .then(json => { return json; })
         .catch(err => console.log(err));
 }
