@@ -3,6 +3,9 @@ import Answer from './Answer'
 import PropTypes from 'prop-types'
 import * as actiontype from '../utils/action_types'
 import { shuffleArray } from '../utils/generic_functions'
+import IncorrectSrc from '../assets/red-x.png'
+import CorrectSrc from '../assets/green-check.png'
+import IdkSrc from '../assets/question-mark.png'
 
 export default function Question({ 
     inbquestionId, 
@@ -97,9 +100,9 @@ export default function Question({
         }
         // If the user clicks the same answer 3 times then we don't have to do anything :)
     }
-    const incorrectSrc = '/app/assets/red-x.png';
-    const correctSrc = '/app/assets/green-check.png';
-    const idkSrc = '/app/assets/question-mark.png';
+    const incorrectSrc = IncorrectSrc;
+    const correctSrc = CorrectSrc;
+    const idkSrc = IdkSrc;
     const circleRight = "answer-circle-right";
     const circleLeft = "answer-circle-left";
     const circleFull = "answer-circle-full";

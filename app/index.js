@@ -10,6 +10,7 @@ import Register from './components/Register'
 import TestMaker from './components/TestMaker'
 import TestTaker from './components/TestTaker'
 import Test from './components/Test'
+import Logo from './assets/logo.png'
 
 function authedPaths() {
     return (
@@ -48,7 +49,7 @@ function App()  {
                         to='/'
                         className='partial-fill'
                     >
-                        <img className='logo' src='/app/assets/logo.png' alt='Quiz Engine' />
+                        <img className='logo' src={Logo} alt='Quiz Engine' />
                     </Link>
                     {!authed
                         ? <React.Fragment>
