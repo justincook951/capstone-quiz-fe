@@ -7,6 +7,9 @@ import Loading from './Loading'
 
 function loginReducer(state, action) {
     if (action.type === actiontype.SUCCESS && action.loginResponse.status !== 401) {
+        // Do you ever hate EU GDPR problems with your asp net core app? No? Just me?
+        document.cookie = `token=${action.loginResponse[0].token}`
+        document.cookie = `userObject=${JSON.stringify(action.loginResponse[0].user)}`
         return {
             loginResponse: action.loginResponse,
             loading: false,

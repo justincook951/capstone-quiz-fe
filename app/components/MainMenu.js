@@ -26,6 +26,24 @@ function MainMenuNav() {
                     </li>
                     <li>
                         <NavLink 
+                            to='/topic/create' 
+                            exact
+                            className='nav-link'
+                            activeStyle={activeStyle}>
+                                Create New Topic
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink 
+                            to='/topic/get' 
+                            exact
+                            className='nav-link'
+                            activeStyle={activeStyle}>
+                                Edit Existing Topics
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink 
                             to='/test/create' 
                             className='nav-link'
                             activeStyle={activeStyle}>

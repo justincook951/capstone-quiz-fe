@@ -10,7 +10,10 @@ import Register from './components/Register'
 import TestMaker from './components/TestMaker'
 import TestTaker from './components/TestTaker'
 import Test from './components/Test'
+import TopicMaker from './components/TopicMaker'
+import Topic from './components/Topic'
 import Logo from './assets/logo.png'
+import { hasValidLogin } from './utils/generic_functions'
 
 function authedPaths() {
     return (
@@ -19,6 +22,8 @@ function authedPaths() {
             <Route exact path='/test/create' component={TestMaker} />
             <Route exact path='/test/get' component={TestTaker} />
             <Route path='/test/get/:sessionId' component={Test} />
+            <Route exact path='/topic/create' component={TopicMaker} />
+            <Route path='/topic/get' component={Topic} />
         </React.Fragment>
     )
 }
@@ -37,9 +42,11 @@ function notAuthedPaths(setAuthed) {
 }
 
 function App()  {
-    const [authed, setAuthed] = React.useState(false);
-    const toggleAuthed = (() => {
-        setAuthed((authed) => authed = !authed)
+    const [authed, setAuthed] = React.useState(hasValidLogin());
+    const logout = (() => {
+        document.cookie="token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+        document.cookie="userObject=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+        setAuthed(false)
     })
     return (
         <div className='container'>
@@ -64,7 +71,7 @@ function App()  {
                                     Register
                                 </NavLink>
                             </React.Fragment>
-                        : <button className='btn btn-style' onClick={toggleAuthed}>Logout</button>}
+                        : <button className='btn btn-style' onClick={logout}>Logout</button>}
                     
                 </div>
                 <h3><i>Learning, made better</i></h3>
