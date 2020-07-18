@@ -47,7 +47,7 @@ body {
     width: 50%;
 }
 
-.grid-small li:not(:first-child) {
+.grid-small li:not(:last-child) {
     align-items: center;
     margin: 10px;
     width: 100%;

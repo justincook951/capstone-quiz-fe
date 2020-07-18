@@ -1,15 +1,15 @@
 import React from 'react'
 import MainMenu from './MainMenu'
-import { fetchSessionsByUser } from '../utils/api'
+import { fetchTopicsByUser } from '../utils/api'
 import * as actiontype from '../utils/action_types'
 import Loading from './Loading'
 import { Redirect } from 'react-router-dom'
 
-function testTakerReducer(state, action) {
+function topicListReducer(state, action) {
     if (action.type === actiontype.SUCCESS) {
         return {
             error: null,
-            sessions: action.response
+            topics: action.response
         }
     }
     else if (action.type === actiontype.FAILURE) {
@@ -24,30 +24,26 @@ function testTakerReducer(state, action) {
     }
 }
 
-function SessionsGrid({ sessions }) {
-    const [sendToTest, setSendToTest] = React.useState(false)
+function TopicsGrid({ topics }) {
+    const [sendToTopic, setSendToTopic] = React.useState(false)
 
-    if (sendToTest) {
-        var targetStr = `/test/get/${sendToTest}`
+    if (sendToTopic) {
+        var targetStr = `/topic/get/${sendToTopic}`
         return <Redirect to={targetStr} />
     }
 
     return (
         <React.Fragment>
-            <li className='btn-style' onClick={() => setSendToTest('new')}>
-                Start New Test
-            </li>
-            <li></li>
-            {sessions.map((session, index) => {
-                const { sessionId, name, lastAccessed } = session
+            {topics.map((topic, index) => {
+                const { id, topicName } = topic
 
                 return (
                     <li 
-                        key={sessionId}
+                        key={id}
                         className='btn-style'
-                        onClick={() => setSendToTest(sessionId)}
+                        onClick={() => setSendToTopic(id)}
                     >
-                        {name}: {lastAccessed} ({sessionId})
+                        {topicName}: ({id})
                     </li>
                 )
             })}
@@ -55,21 +51,21 @@ function SessionsGrid({ sessions }) {
     )
 }
 
-export default function TestTaker() {
-    // Fetch all existing sessions (tests in progress) for this user
+export default function TopicList() {
+    // Fetch all existing topics, or topics just for this user if they're an admin
     const [state, dispatch] = React.useReducer(
-        testTakerReducer,
+        topicListReducer,
         {error: null}
     )
     React.useEffect(() => {
-        fetchSessionsByUser()
+        fetchTopicsByUser()
             .then((response) => {
                 dispatch({ type: actiontype.SUCCESS, state, response })
             })
             .catch((err) => dispatch({ type: actiontype.ERROR, err }));
     }, [])
 
-    const isLoading = () => !state.sessions && state.error === null
+    const isLoading = () => !state.topics && state.error === null
 
     return (
         <div>
@@ -77,8 +73,8 @@ export default function TestTaker() {
             <hr/>
             <div className="sub-container">                
                  <ul className='grid-small space-around'>
-                    {state.sessions ? <SessionsGrid sessions={state.sessions} /> : null}
-                    <li>{isLoading() ? <Loading text='Getting tests' /> : null}</li>
+                    {state.topics ? <TopicsGrid topics={state.topics} /> : null}
+                    <li>{isLoading() ? <Loading text='Getting topics' /> : null}</li>
                 </ul>
             </div>
         </div>

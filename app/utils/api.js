@@ -24,35 +24,15 @@ var questionsList = [
     },
 ]
 
+/*
+============================================================
+=================TEST MANAGEMENT FUNCTIONS==================
+============================================================
+*/
 
-export function fetchSessionsByUser(userId) {
-    // const endpoint = window.encodeURI(`${apiUrlBase}/get/sessions/${userId}`);
-    // const endpoint = window.encodeURI(`https://api.github.com/users/justincook951/repos?per_page=100`);
-    // return fetch(endpoint)
-    //     .then((res) => res.json())
-    //     .then((data) => {
-    //         console.log(`API Url Base: ${apiUrlBase}`)
-    //         return data;
-    //     })
-    // Emulate fetch for now, without hitting an endpoint
-    let samplePromise = new Promise((resolve, reject) => {
-        setTimeout( function() {
-            resolve([
-                {sessionId: 1, name: 'Session 1', lastAccessed: "2 Days"},
-                {sessionId: 2, name: 'Session 2', lastAccessed: "Today" },
-                {sessionId: 3, name: 'Session 3', lastAccessed: "Today" },
-                {sessionId: 4, name: 'Session 4', lastAccessed: "Today" },
-                {sessionId: 5, name: 'Session 5', lastAccessed: "Today" },
-                {sessionId: 6, name: 'Session 6', lastAccessed: "Today" },
-            ])
-        }, 1000)
-    })
-
-    return samplePromise
-        //.then((res) => res.json())
-        .then((data) => {
-            return data;
-        })
+export function generateNewTest() {
+    // Emulate the same material, for now.
+    return fetchNextQuestionBySession("123");
 }
 
 export function fetchNextQuestionBySession(sessionId) {
@@ -81,10 +61,68 @@ export function addQuestionTolist(question, count) {
     }
 }
 
-export function generateNewTest() {
-    // Emulate the same material, for now.
-    return fetchNextQuestionBySession("123");
+export function fetchSessionsByUser(userId) {
+    // const endpoint = window.encodeURI(`${apiUrlBase}/get/sessions/${userId}`);
+    // const endpoint = window.encodeURI(`https://api.github.com/users/justincook951/repos?per_page=100`);
+    // return fetch(endpoint)
+    //     .then((res) => res.json())
+    //     .then((data) => {
+    //         console.log(`API Url Base: ${apiUrlBase}`)
+    //         return data;
+    //     })
+    // Emulate fetch for now, without hitting an endpoint
+    let samplePromise = new Promise((resolve, reject) => {
+        setTimeout( function() {
+            resolve([
+                {sessionId: 1, name: 'Session 1', lastAccessed: "2 Days"},
+                {sessionId: 2, name: 'Session 2', lastAccessed: "Today" },
+                {sessionId: 3, name: 'Session 3', lastAccessed: "Today" },
+                {sessionId: 4, name: 'Session 4', lastAccessed: "Today" },
+                {sessionId: 5, name: 'Session 5', lastAccessed: "Today" },
+            ])
+        }, 1000)
+    })
+
+    return samplePromise
+        //.then((res) => res.json())
+        .then((data) => {
+            return data;
+        })
 }
+
+/*
+============================================================
+=================TOPIC MANAGEMENT FUNCTIONS=================
+============================================================
+*/
+
+export function fetchTopicsByUser() {
+    const endpoint = window.encodeURI(`${apiUrlBase}/api/Topics`);
+
+    return fetch(endpoint)
+        .then((res) => res.json())
+        .then((data) => {
+            return data;
+        })
+        .catch(err => console.log(err));
+}
+
+export function generateNewTopic({topicName, topicDescription, userId}) {
+    var endpoint = `${apiUrlBase}/api/Topics`;
+    var postObject = {
+        "topicName": topicName,
+        "topicDescription": topicDescription,
+        "userId": userId
+    };
+    return sendPostRequest(postObject, endpoint)
+}
+
+
+/*
+============================================================
+=================USER MANAGEMENT FUNCTIONS==================
+============================================================
+*/
 
 export function fetchAllUsers() {
     const endpoint = window.encodeURI(`${apiUrlBase}/api/Users`);
@@ -92,31 +130,21 @@ export function fetchAllUsers() {
     return fetch(endpoint)
         .then((res) => res.json())
         .then((data) => {
-            console.log(data)
             return data;
         })
         .catch(err => console.log(err));
 }
 
 export function registerUser({firstName, lastName, username, password}) {
-    const endpoint = window.encodeURI(`${apiUrlBase}/api/Users`);
-
-    return fetch(endpoint, {
-        method: "POST",
-        body: JSON.stringify({
-            "username": username,
-            "password":password,
-            "firstName": firstName,
-            "lastName": lastName,
-            "isAdmin": false
-        }),
-        headers: {
-            "Content-type": "application/json; charset=UTF-8"
-        }
-    })
-        .then(response => response.json()) 
-        .then(json => { console.log(json);return json })
-        .catch(err => console.log(err));
+    var endpoint = `${apiUrlBase}/api/Users`;
+    var postObject = {
+        "username": username,
+        "password":password,
+        "firstName": firstName,
+        "lastName": lastName,
+        "isAdmin": false
+    };
+    return sendPostRequest(postObject, endpoint)
 }
 
 export function getToken({username, password}) {
@@ -134,5 +162,26 @@ export function getToken({username, password}) {
     })
         .then(response => response.json()) 
         .then(json => { return json; })
+        .catch(err => console.log(err));
+}
+
+/*
+============================================================
+====================GENERIC API FUNCTIONS===================
+============================================================
+*/
+
+function sendPostRequest(postObject, unencodedUri) {
+    const endpoint = window.encodeURI(unencodedUri);
+
+    return fetch(endpoint, {
+        method: "POST",
+        body: JSON.stringify(postObject),
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        }
+    })
+        .then(response => response.json()) 
+        .then(json => { console.log(json);return json })
         .catch(err => console.log(err));
 }

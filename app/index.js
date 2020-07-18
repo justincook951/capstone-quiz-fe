@@ -12,6 +12,7 @@ import TestTaker from './components/TestTaker'
 import Test from './components/Test'
 import TopicMaker from './components/TopicMaker'
 import Topic from './components/Topic'
+import TopicList from './components/TopicList'
 import Logo from './assets/logo.png'
 import { hasValidLogin } from './utils/generic_functions'
 
@@ -23,7 +24,8 @@ function authedPaths() {
             <Route exact path='/test/get' component={TestTaker} />
             <Route path='/test/get/:sessionId' component={Test} />
             <Route exact path='/topic/create' component={TopicMaker} />
-            <Route path='/topic/get' component={Topic} />
+            <Route exact path='/topic/get' component={TopicList} />
+            <Route path='/topic/get/:topicId' component={Topic} />
         </React.Fragment>
     )
 }

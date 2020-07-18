@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Question from './Question'
 import { fetchNextQuestionBySession, generateNewTest, removeQuestionFromList, addQuestionTolist } from '../utils/api'
 import * as actiontype from '../utils/action_types'

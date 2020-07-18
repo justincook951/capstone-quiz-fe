@@ -59,6 +59,19 @@ export function getLoggedInUserObject() {
     return userObj;
 }
 
+export function getUserData(property = "") {
+    var userObject = getLoggedInUserObject();
+    if (!userObject) {
+        return false;
+    }
+    if (property) {
+        return userObject[property];
+    }
+    else {
+        return userObject;
+    }
+}
+
 function b64DecodeUnicode(str) {
     // Going backwards: from bytestream, to percent-encoding, to original string.
     return decodeURIComponent(atob(str).split('').map(function(c) {
