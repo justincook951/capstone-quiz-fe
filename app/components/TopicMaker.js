@@ -9,21 +9,21 @@ import Loading from './Loading'
 function topicReducer(state, action) {
     if (action.type === actiontype.SUCCESS) {
         return {
-            postResponse: action.postResponse,
+            apiResponse: action.apiResponse,
             loading: false,
             error: null
         }
     }
     else if (action.type === actiontype.ERROR) {
         return {
-            postResponse: null,
+            apiResponse: null,
             loading: false,
             error: action.message
         }
     }
     else if (action.type === actiontype.LOADING) {
         return {
-            postResponse: null,
+            apiResponse: null,
             loading: true,
             error: null
         }
@@ -39,18 +39,18 @@ export default function TopicMaker() {
     const [userId,] = React.useState(getUserData("id"))
     const [state, dispatch] = React.useReducer(
         topicReducer,
-        {postResponse: null, loading: false, error: null}
+        {apiResponse: null, loading: false, error: null}
     )
 
-    const { postResponse, error, loading } = state
+    const { apiResponse, error, loading } = state
 
     const handleSubmit = () => {
-        dispatch({type: actiontype.LOADING, postResponse: null, error: null})
+        dispatch({type: actiontype.LOADING, apiResponse: null, error: null})
         generateNewTopic({ topicName: topicName, topicDescription: description, userId: userId })
-            .then((response) => dispatch({type: actiontype.SUCCESS, postResponse: response, loading: false}))
+            .then((response) => dispatch({type: actiontype.SUCCESS, apiResponse: response, loading: false}))
     }
 
-    if (postResponse && !error) {
+    if (apiResponse && !error) {
         return <Redirect to='/topic/get' />
     }
 
@@ -83,14 +83,14 @@ export default function TopicMaker() {
                 />
             </div>
             <div className="row">
-            {loading
-                ? <Loading text="Submitting Topic" />
-                : 
-                <button 
-                className="btn btn-style"
-                disabled={!topicName || !description}
-                onClick={handleSubmit}>Create and Add Questions</button>
-            }
+                {loading
+                    ? <Loading text="Submitting Topic" />
+                    : 
+                    <button 
+                    className="btn btn-style"
+                    disabled={!topicName || !description}
+                    onClick={handleSubmit}>Create and Add Questions</button>
+                }
 
             </div>
         </div>

@@ -97,14 +97,15 @@ export function fetchSessionsByUser(userId) {
 */
 
 export function fetchTopicsByUser() {
-    const endpoint = window.encodeURI(`${apiUrlBase}/api/Topics`);
+    var endpoint = `${apiUrlBase}/api/Topics`;
 
-    return fetch(endpoint)
-        .then((res) => res.json())
-        .then((data) => {
-            return data;
-        })
-        .catch(err => console.log(err));
+    return performGet(endpoint)
+}
+
+export function fetchTopicById(topicId) {
+    var endpoint = `${apiUrlBase}/api/Topics/${topicId}`;
+
+    return performGet(endpoint)
 }
 
 export function generateNewTopic({topicName, topicDescription, userId}) {
@@ -115,6 +116,14 @@ export function generateNewTopic({topicName, topicDescription, userId}) {
         "userId": userId
     };
     return sendPostRequest(postObject, endpoint)
+}
+
+export function editTopic(topic) {
+    var endpoint = `${apiUrlBase}/api/Topics/${topic.id}`;
+    var postObject = topic;
+    console.log("Topic to post: ")
+    console.log(topic)
+    return sendPutRequest(postObject, endpoint)
 }
 
 
@@ -148,21 +157,13 @@ export function registerUser({firstName, lastName, username, password}) {
 }
 
 export function getToken({username, password}) {
-    const endpoint = window.encodeURI(`${apiUrlBase}/api/Token`);
+    const endpoint = `${apiUrlBase}/api/Token`;
+    var postObject = {
+        "username": username,
+        "password":password
+    };
 
-    return fetch(endpoint, {
-        method: "POST",
-        body: JSON.stringify({
-            "username": username,
-            "password":password
-        }),
-        headers: {
-            "Content-type": "application/json; charset=UTF-8"
-        }
-    })
-        .then(response => response.json()) 
-        .then(json => { return json; })
-        .catch(err => console.log(err));
+    return sendPostRequest(postObject, endpoint)
 }
 
 /*
@@ -170,6 +171,15 @@ export function getToken({username, password}) {
 ====================GENERIC API FUNCTIONS===================
 ============================================================
 */
+
+function performGet(unencodedUri) {
+    return fetch(unencodedUri)
+    .then((res) => res.json())
+    .then((data) => {
+        return data;
+    })
+    .catch(err => console.log(err));
+}
 
 function sendPostRequest(postObject, unencodedUri) {
     const endpoint = window.encodeURI(unencodedUri);
@@ -182,6 +192,27 @@ function sendPostRequest(postObject, unencodedUri) {
         }
     })
         .then(response => response.json()) 
-        .then(json => { console.log(json);return json })
+        .then(json => { return json })
+        .catch(err => console.log(err));
+}
+
+function sendPutRequest(putObject, unencodedUri) {
+    const endpoint = window.encodeURI(unencodedUri);
+
+    return fetch(endpoint, {
+        method: "PUT",
+        body: JSON.stringify(putObject),
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        }
+    })
+        .then(response => {
+            console.log(response); 
+            if (response.url) {
+                return performGet(response.url)
+            }
+        else {
+            return true;
+        }}) 
         .catch(err => console.log(err));
 }

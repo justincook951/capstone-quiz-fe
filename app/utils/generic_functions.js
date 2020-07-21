@@ -35,10 +35,10 @@ export function hasValidLogin() {
         var trimmedTokenArr = loginToken.split(".");
         var decodedStr = b64DecodeUnicode(`${trimmedTokenArr[1]}`);
         var tokenObj = JSON.parse(decodedStr);
-        // This doesn't evaluate properly. Good luck.
-        var hasValidToken = (tokenObj.exp > new Date().getTime());
-        console.log(tokenObj)
-        console.log(tokenObj.exp < new Date().getTime())
+        var currentTime = (new Date().getTime()).toString();
+        // Evaluate against the exp that was given to us, in its format (remove ms digits from the end)
+        var trimmedTime = currentTime.substring(0, currentTime.length - 3)
+        var hasValidToken = (tokenObj.exp < trimmedTime);
     }
     return hasValidToken;
 }
@@ -77,4 +77,9 @@ function b64DecodeUnicode(str) {
     return decodeURIComponent(atob(str).split('').map(function(c) {
         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
     }).join(''));
+}
+
+export function expireToken() {
+    document.cookie="token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+    document.cookie="userObject=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
 }

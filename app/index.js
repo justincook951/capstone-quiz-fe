@@ -14,7 +14,7 @@ import TopicMaker from './components/TopicMaker'
 import Topic from './components/Topic'
 import TopicList from './components/TopicList'
 import Logo from './assets/logo.png'
-import { hasValidLogin } from './utils/generic_functions'
+import { hasValidLogin, expireToken } from './utils/generic_functions'
 
 function authedPaths() {
     return (
@@ -46,8 +46,7 @@ function notAuthedPaths(setAuthed) {
 function App()  {
     const [authed, setAuthed] = React.useState(hasValidLogin());
     const logout = (() => {
-        document.cookie="token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
-        document.cookie="userObject=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+        expireToken()
         setAuthed(false)
     })
     return (
