@@ -64,20 +64,18 @@ export default function Topic() {
     }, [topicId])
 
     const handleSubmit = () => {
-        // var changedTopicData = {
-        //     "id": 8,
-        //     "topicName": "UPDATED",
-        //     "topicDescription": "UPDATED",
-        //     "userId": existingTopic.userId
-        // }
-        // dispatch({type: actiontype.LOADING, apiResponse: null, error: null, updatedTopic: changedTopicData })
-        // editTopic(updatedTopic)
-        //     .then((response) => dispatch({type: actiontype.SUCCESS, apiResponse: response, loading: false}))
-        console.log("Submittin'")
+        var changedTopicData = {
+            "id": parseInt(topicId),
+            "topicName": state.topicName,
+            "topicDescription": state.topicDescription
+        }
+        editTopic(changedTopicData)
+            .then((response) => dispatch({type: actiontype.SUCCESS, apiResponse: response, loading: false}))
+            .catch((error) => dispatch({type: actiontype.ERROR, error: error, loading: false}));
     }
 
     const cancel = () => {
-        dispatch({ type: actiontype.RESET })
+        initialState.topicDescription = "changed"
     }
 
     if (state.loading === true) {
@@ -86,60 +84,60 @@ export default function Topic() {
 
     return (
         <div>
-        <MainMenu />
-        <hr/>
-        <div className="register-container flex-column-container">
-            <h2 className="center-text header-lg">Topic Editor</h2>
-            <div className="text-input space-top">
-                <label htmlFor="topicName" className="reqd">Topic Name: </label>
-                <input 
-                    className="input-fill" 
-                    type="text" 
-                    name="topicName" 
-                    placeholder="Descriptive name or chapter number" 
-                    id="topicName"
-                    defaultValue={state.topicName}
-                    onChange={(e) => dispatch({
-                        type: UPDATE_TOPIC,
-                        topic: e.target.value
-                    })}
-                />
-            </div>
-            <div className="text-input">
-                <label htmlFor="description" className="reqd">Description for your topic: </label>
-                <input 
-                    className="input-fill" 
-                    type="text" 
-                    name="description" 
-                    placeholder="Some description" 
-                    id="description"
-                    defaultValue={state.topicDescription}
-                    onChange={(e) => dispatch({
-                        type: UPDATE_DESCRIPTION,
-                        topic: e.target.value
-                    })}
-                />
-            </div>
-            <div>
-                Questions here
-            </div>
-            <div className="row">
-                {state.loading
-                    ? <Loading text="Submitting Topic" />
-                    : 
-                    <React.Fragment>
-                        <button 
-                            className="btn btn-style"
-                            disabled={false}
-                            onClick={handleSubmit}>Save Topic Data</button>
-                        <button 
-                            className="btn btn-style"
-                            onClick={cancel}>Cancel</button>
-                    </React.Fragment>
-                }
+            <MainMenu />
+            <hr/>
+            <div className="register-container flex-column-container">
+                <h2 className="center-text header-lg">Topic Editor</h2>
+                <div className="text-input space-top">
+                    <label htmlFor="topicName" className="reqd">Topic Name: </label>
+                    <input 
+                        className="input-fill" 
+                        type="text" 
+                        name="topicName" 
+                        placeholder="Descriptive name or chapter number" 
+                        id="topicName"
+                        defaultValue={state.topicName}
+                        onChange={(e) => dispatch({
+                            type: UPDATE_TOPIC,
+                            topicName: e.target.value
+                        })}
+                    />
+                </div>
+                <div className="text-input">
+                    <label htmlFor="description" className="reqd">Description for your topic: </label>
+                    <input 
+                        className="input-fill" 
+                        type="text" 
+                        name="description" 
+                        placeholder="Some description" 
+                        id="description"
+                        defaultValue={state.topicDescription}
+                        onChange={(e) => dispatch({
+                            type: UPDATE_DESCRIPTION,
+                            topicDescription: e.target.value
+                        })}
+                    />
+                </div>
+                <div>
+                    Questions here
+                </div>
+                <div className="row">
+                    {state.loading
+                        ? <Loading text="Submitting Topic" />
+                        : 
+                        <React.Fragment>
+                            <button 
+                                className="btn btn-style"
+                                disabled={false}
+                                onClick={handleSubmit}>Save Topic Data</button>
+                            <button 
+                                className="btn btn-style"
+                                onClick={cancel}>Cancel</button>
+                        </React.Fragment>
+                    }
 
+                </div>
             </div>
         </div>
-    </div>
     )
 }

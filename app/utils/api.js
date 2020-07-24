@@ -121,8 +121,6 @@ export function generateNewTopic({topicName, topicDescription, userId}) {
 export function editTopic(topic) {
     var endpoint = `${apiUrlBase}/api/Topics/${topic.id}`;
     var postObject = topic;
-    console.log("Topic to post: ")
-    console.log(topic)
     return sendPutRequest(postObject, endpoint)
 }
 
@@ -207,7 +205,6 @@ function sendPutRequest(putObject, unencodedUri) {
         }
     })
         .then(response => {
-            console.log(response); 
             if (response.url) {
                 return performGet(response.url)
             }

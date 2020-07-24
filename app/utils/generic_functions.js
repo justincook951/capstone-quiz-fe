@@ -30,6 +30,7 @@ export function getLoginCookie() {
 
 export function hasValidLogin() {
     var loginToken = getLoginCookie();
+    hasValidToken = false;
     if (loginToken) {
         // Oh, and if we try to base64 decode the signature, it explodes. :D
         var trimmedTokenArr = loginToken.split(".");
@@ -38,8 +39,13 @@ export function hasValidLogin() {
         var currentTime = (new Date().getTime()).toString();
         // Evaluate against the exp that was given to us, in its format (remove ms digits from the end)
         var trimmedTime = currentTime.substring(0, currentTime.length - 3)
-        var hasValidToken = (tokenObj.exp < trimmedTime);
+        var hasValidToken = (tokenObj.exp > trimmedTime);
+        if (!hasValidToken) {
+            // Clear out any existing cookies
+            expireToken()
+        }
     }
+    
     return hasValidToken;
 }
 
