@@ -223,15 +223,15 @@ li {
     width: 40%;
     margin: 0 auto;
     background: lightgray;
+    padding: 10px;
 }
 
 .text-input {
     width: 100%;
-    margin-left: 10px;
 }
 
 .input-fill {
-    width: 88%;
+    width: 90%;
     padding: 15px;
     margin: 5px 0 22px 0;
     display: inline-block;
@@ -246,4 +246,21 @@ li {
 .reqd::after {
     content: "*";
     color: rgb(172, 5, 5);
+}
+
+.edit-link-rows{
+    width: inherit;
+    overflow: hidden;
+    border: 1px solid gray;
+    margin-bottom: 7px;
+    padding-left: 5px;
+    
+}
+
+.edit-link-rows:nth-child(even){
+    background: gray;
+}
+
+.edit-link-rows:nth-child(odd){
+    background: white;
 }

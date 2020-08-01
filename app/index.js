@@ -15,6 +15,7 @@ import Topic from './components/Topic'
 import TopicList from './components/TopicList'
 import Logo from './assets/logo.png'
 import { hasValidLogin, expireToken } from './utils/generic_functions'
+import QuestionEditor from './components/QuestionEditor'
 
 function authedPaths() {
     return (
@@ -26,6 +27,7 @@ function authedPaths() {
             <Route exact path='/topic/create' component={TopicMaker} />
             <Route exact path='/topic/get' component={TopicList} />
             <Route path='/topic/get/:topicId' component={Topic} />
+            <Route path='/question/get/:questionId' component={QuestionEditor} />
         </React.Fragment>
     )
 }

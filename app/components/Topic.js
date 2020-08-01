@@ -1,16 +1,16 @@
 import React from 'react'
 import MainMenu from './MainMenu'
-import { getUserData } from '../utils/generic_functions'
-import { editTopic, fetchTopicById } from '../utils/api'
+import { editTopic, fetchTopicById, deleteQuestion, generateNewQuestion } from '../utils/api'
 import * as actiontype from '../utils/action_types'
 import Loading from './Loading'
-import { useParams } from "react-router";
+import { useParams, Redirect } from "react-router";
 
 const initialState = {
     loading: false,
     topicName: "",
     topicDescription: "",
-    error: null
+    error: null,
+    questions: []
 }
 const UPDATE_TOPIC = "UPDATE_TOPIC"
 const UPDATE_DESCRIPTION = "UPDATE_DESCRIPTION"
@@ -18,7 +18,15 @@ const UPDATE_DESCRIPTION = "UPDATE_DESCRIPTION"
 function topicReducer(state, action) {
     switch (action.type) {
         case actiontype.SUCCESS:
-            return {...state, topicName: action.topicName, topicDescription: action.topicDescription, loading: false};
+            console.log("Calling topicReducer")
+            console.log(action)
+            return {
+                ...state, 
+                topicName: action.topicName,
+                topicDescription: action.topicDescription, 
+                questions: action.questions, 
+                loading: false,
+            };
         case actiontype.ERROR:
             return {...state, error: action.error, loading: false};
         case actiontype.LOADING:
@@ -48,7 +56,8 @@ export default function Topic() {
                 dispatch({
                     type: actiontype.SUCCESS,
                     topicName: apiResponse.topicName,
-                    topicDescription: apiResponse.topicDescription
+                    topicDescription: apiResponse.topicDescription,
+                    questions: apiResponse.questions
                 });
             })
             .catch((error) => {
@@ -70,7 +79,13 @@ export default function Topic() {
             "topicDescription": state.topicDescription
         }
         editTopic(changedTopicData)
-            .then((response) => dispatch({type: actiontype.SUCCESS, apiResponse: response, loading: false}))
+            .then((apiResponse) => dispatch({   
+                    type: actiontype.SUCCESS, 
+                    topicName: apiResponse.topicName,
+                    topicDescription: apiResponse.topicDescription,
+                    questions: apiResponse.questions,
+                    loading: false
+                }))
             .catch((error) => dispatch({type: actiontype.ERROR, error: error, loading: false}));
     }
 
@@ -119,25 +134,60 @@ export default function Topic() {
                     />
                 </div>
                 <div>
-                    Questions here
+                    <QuestionsGrid questions={state.questions} inbtopicId={topicId} />
                 </div>
                 <div className="row">
-                    {state.loading
-                        ? <Loading text="Submitting Topic" />
-                        : 
-                        <React.Fragment>
-                            <button 
-                                className="btn btn-style"
-                                disabled={false}
-                                onClick={handleSubmit}>Save Topic Data</button>
-                            <button 
-                                className="btn btn-style"
-                                onClick={cancel}>Cancel</button>
-                        </React.Fragment>
-                    }
-
+                    <React.Fragment>
+                        <button 
+                            className="btn btn-style"
+                            disabled={false}
+                            onClick={handleSubmit}>Save Topic Data</button>
+                        <button 
+                            className="btn btn-style"
+                            onClick={cancel}>Cancel</button>
+                    </React.Fragment>
                 </div>
             </div>
         </div>
+    )
+}
+
+function QuestionsGrid({ questions, inbtopicId }) {
+    const [sendToUrl, setSendToUrl] = React.useState(false)
+    const topicId = inbtopicId;
+
+    if (sendToUrl) {
+        var targetStr = `/question/get/${sendToUrl}`
+        return <Redirect to={targetStr} />
+    }
+
+    const deleteQuestionCall = (id) => {
+        deleteQuestion(id)
+            .then(() => {window.location.reload()});
+    }
+
+    const createQuestion = () => {
+        generateNewQuestion(topicId)
+            .then((response) => setSendToUrl(response.id))
+    }
+
+    return (
+        <React.Fragment>
+            <span onClick={() => createQuestion()}>New Question</span><br/><br/>
+            {questions.map((question, index) => {
+                const { id, questionText } = question
+
+                return (
+                    <li 
+                        key={id}
+                        className="edit-link-rows"
+                    >
+                        <span onClick={() => setSendToUrl(id)}>Edit </span>
+                        <span onClick={() => deleteQuestionCall(id)}>Delete </span>
+                        {questionText}: ({id})
+                    </li>
+                )
+            })}
+        </React.Fragment>
     )
 }

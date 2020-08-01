@@ -6,7 +6,7 @@ import { Redirect } from 'react-router-dom'
 import * as actiontype from '../utils/action_types'
 import Loading from './Loading'
 
-function topicReducer(state, action) {
+function topicMakerReducer(state, action) {
     if (action.type === actiontype.SUCCESS) {
         return {
             apiResponse: action.apiResponse,
@@ -38,7 +38,7 @@ export default function TopicMaker() {
     const [description, setDescription] = React.useState("")
     const [userId,] = React.useState(getUserData("id"))
     const [state, dispatch] = React.useReducer(
-        topicReducer,
+        topicMakerReducer,
         {apiResponse: null, loading: false, error: null}
     )
 
@@ -86,10 +86,10 @@ export default function TopicMaker() {
                 {loading
                     ? <Loading text="Submitting Topic" />
                     : 
-                    <button 
-                    className="btn btn-style"
-                    disabled={!topicName || !description}
-                    onClick={handleSubmit}>Create and Add Questions</button>
+                        <button 
+                        className="btn btn-style"
+                        disabled={!topicName || !description}
+                        onClick={handleSubmit}>Create and Add Questions</button>
                 }
 
             </div>

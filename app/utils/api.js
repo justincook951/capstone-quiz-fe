@@ -124,6 +124,66 @@ export function editTopic(topic) {
     return sendPutRequest(postObject, endpoint)
 }
 
+/*
+============================================================
+===============QUESTION MANAGEMENT FUNCTIONS================
+============================================================
+*/
+
+export function fetchQuestionById(questionId) {
+    var endpoint = `${apiUrlBase}/api/Questions/${questionId}`;
+
+    return performGet(endpoint)
+}
+
+export function generateNewQuestion(inbtopicId) {
+    var endpoint = `${apiUrlBase}/api/Questions`;
+    var question = {
+        questionText:"New Question Text",
+        topicId: parseInt(inbtopicId),
+        questionExplanation:"Sample Explanation"
+    }
+    var postObject = question;
+    console.log(postObject)
+    return sendPostRequest(postObject, endpoint)
+}
+
+export function updateQuestion(question) {
+    var endpoint = `${apiUrlBase}/api/Questions/${question.id}`;
+    var postObject = question;
+    return sendPutRequest(postObject, endpoint)
+}
+
+export function deleteQuestion(questionId) {
+    var endpoint = `${apiUrlBase}/api/Questions/${questionId}`;
+    
+    return sendDeleteRequest(endpoint)
+}
+
+/*
+============================================================
+================ANSWER MANAGEMENT FUNCTIONS=================
+============================================================
+*/
+
+export function generateNewAnswer(answer) {
+    var endpoint = `${apiUrlBase}/api/Answers`;
+    var postObject = answer;
+    return sendPostRequest(postObject, endpoint)
+}
+
+export function updateAnswer(answer) {
+    var endpoint = `${apiUrlBase}/api/Answers/${answer.id}`;
+    var postObject = answer;
+    return sendPutRequest(postObject, endpoint)
+}
+
+export function deleteAnswer(answerId) {
+    var endpoint = `${apiUrlBase}/api/Answers/${answerId}`;
+    
+    return sendDeleteRequest(endpoint)
+}
+
 
 /*
 ============================================================
@@ -171,7 +231,8 @@ export function getToken({username, password}) {
 */
 
 function performGet(unencodedUri) {
-    return fetch(unencodedUri)
+    const endpoint = window.encodeURI(unencodedUri);
+    return fetch(endpoint)
     .then((res) => res.json())
     .then((data) => {
         return data;
@@ -200,16 +261,26 @@ function sendPutRequest(putObject, unencodedUri) {
     return fetch(endpoint, {
         method: "PUT",
         body: JSON.stringify(putObject),
-        headers: {
-            "Content-type": "application/json; charset=UTF-8"
-        }
+        headers: {"Content-type": "application/json; charset=UTF-8"}
     })
         .then(response => {
             if (response.url) {
+                console.log(response)
                 return performGet(response.url)
             }
         else {
             return true;
         }}) 
+        .catch(err => console.log(err));
+}
+
+function sendDeleteRequest(unencodedUri) {
+    const endpoint = window.encodeURI(unencodedUri); 
+
+    return fetch(endpoint, {
+        method: "DELETE"
+    })
+        .then(response => response.json()) 
+        .then(json => { return json })
         .catch(err => console.log(err));
 }
