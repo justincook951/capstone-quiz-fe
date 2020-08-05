@@ -44,14 +44,6 @@ function MainMenuNav() {
                     </li>
                     <li>
                         <NavLink 
-                            to='/test/create' 
-                            className='nav-link'
-                            activeStyle={activeStyle}>
-                                Create New Test
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink 
                             to='/test/get' 
                             className='nav-link'
                             activeStyle={activeStyle}>

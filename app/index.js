@@ -45,6 +45,19 @@ function notAuthedPaths(setAuthed) {
     )
 }
 
+function NotFound() {
+    return (
+        <div>
+            <h1>Could not locate page! 
+            <NavLink 
+                to='/' 
+                exact
+                className='reg-link'>Return home.</NavLink>
+            </h1>
+        </div>
+    )
+}
+
 function App()  {
     const [authed, setAuthed] = React.useState(hasValidLogin());
     const logout = (() => {
@@ -80,19 +93,13 @@ function App()  {
                 <h3><i>Learning, made better</i></h3>
                 <hr/>
                 <React.Suspense fallback={<Loading/>} >
-                    
                     <Switch>
                         {authed === true 
                             ? authedPaths()
                             : notAuthedPaths(setAuthed)
                         }
                         
-                        <Route render={() => <h1>Could not locate page! 
-                            <NavLink 
-                                to='/' 
-                                exact
-                                className='reg-link'>Return home.</NavLink>
-                            </h1>} />
+                        <Route path='*' component={NotFound} />
                     </Switch>                        
                 </React.Suspense>
             </Router>

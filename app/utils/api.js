@@ -118,7 +118,7 @@ export function generateNewTopic({topicName, topicDescription, userId}) {
     return sendPostRequest(postObject, endpoint)
 }
 
-export function editTopic(topic) {
+export function updateTopic(topic) {
     var endpoint = `${apiUrlBase}/api/Topics/${topic.id}`;
     var postObject = topic;
     return sendPutRequest(postObject, endpoint)
@@ -149,6 +149,7 @@ export function generateNewQuestion(inbtopicId) {
 }
 
 export function updateQuestion(question) {
+    console.log(question)
     var endpoint = `${apiUrlBase}/api/Questions/${question.id}`;
     var postObject = question;
     return sendPutRequest(postObject, endpoint)

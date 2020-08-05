@@ -1,6 +1,6 @@
 import React from 'react'
 import MainMenu from './MainMenu'
-import { editTopic, fetchTopicById, deleteQuestion, generateNewQuestion } from '../utils/api'
+import { updateTopic, fetchTopicById, deleteQuestion, generateNewQuestion } from '../utils/api'
 import * as actiontype from '../utils/action_types'
 import Loading from './Loading'
 import { useParams, Redirect } from "react-router";
@@ -43,6 +43,7 @@ function topicReducer(state, action) {
 }
 
 export default function Topic() {
+    const [returnToList, setReturnToList] = React.useState(false);
     const [state, dispatch] = React.useReducer(
         topicReducer,
         initialState
@@ -78,7 +79,7 @@ export default function Topic() {
             "topicName": state.topicName,
             "topicDescription": state.topicDescription
         }
-        editTopic(changedTopicData)
+        updateTopic(changedTopicData)
             .then((apiResponse) => dispatch({   
                     type: actiontype.SUCCESS, 
                     topicName: apiResponse.topicName,
@@ -89,12 +90,13 @@ export default function Topic() {
             .catch((error) => dispatch({type: actiontype.ERROR, error: error, loading: false}));
     }
 
-    const cancel = () => {
-        initialState.topicDescription = "changed"
-    }
-
     if (state.loading === true) {
         return <div><Loading text="Combobulizing the Crazlars" /></div>
+    }
+
+    if (returnToList === true) {
+        var targetStr = `/topic/get`
+        return <Redirect to={targetStr} />
     }
 
     return (
@@ -144,7 +146,7 @@ export default function Topic() {
                             onClick={handleSubmit}>Save Topic Data</button>
                         <button 
                             className="btn btn-style"
-                            onClick={cancel}>Cancel</button>
+                            onClick={() => setReturnToList(true)}>Cancel</button>
                     </React.Fragment>
                 </div>
             </div>
