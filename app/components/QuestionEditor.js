@@ -1,10 +1,11 @@
 import React from 'react'
 import MainMenu from './MainMenu'
-import { updateQuestion, fetchQuestionById, deleteAnswer } from '../utils/api'
+import { updateQuestion, fetchQuestionById, deleteAnswer, generateNewAnswer } from '../utils/api'
 import * as actiontype from '../utils/action_types'
 import Loading from './Loading'
 import { useParams, Redirect } from "react-router";
 import AnswerEditor from './AnswerEditor'
+import { genericFilterOutItem } from '../utils/generic_functions'
 
 const initialState = {
     loading: false,
@@ -18,6 +19,7 @@ const initialState = {
 }
 const UPDATE_QUESTION_TEXT = "UPDATE_QUESTION_TEXT"
 const UPDATE_EXPLANATION = "UPDATE_EXPLANATION"
+const ADD_ANSWER = "ADD_ANSWER"
 
 function questionEditorReducer(state, action) {
     switch (action.type) {
@@ -27,7 +29,6 @@ function questionEditorReducer(state, action) {
             && action.answers.length > 1) {
                 isValidQuestion = (action.answers.filter(answer => answer.isCorrect == true)).length > 0;
             }
-            console.log(isValidQuestion)
             return {
                 ...state, 
                 questionText: action.questionText,
@@ -38,6 +39,11 @@ function questionEditorReducer(state, action) {
                 isValidQuestion: isValidQuestion,
                 loading: false,
             };
+        case ADD_ANSWER:
+            state.answers.push(action.answer)
+            return {
+                ...state
+            }
         case actiontype.ERROR:
             return {...state, error: action.error, loading: false};
         case actiontype.LOADING:
@@ -94,7 +100,6 @@ export default function QuestionEditor() {
     }
 
     const handleSubmit = () => {
-        console.log("handle submit")
         var changedData = {
             "id": parseInt(questionId),
             "questionText": state.questionText,
@@ -110,6 +115,17 @@ export default function QuestionEditor() {
                     topicName: apiResponse.topicName,
                     answers: apiResponse.answers
                 }))
+            .catch((error) => dispatch({type: actiontype.ERROR, error: error, loading: false}));
+    }
+
+    const addAnswer = (answer) => {
+        generateNewAnswer(answer)
+            .then((answer) => {
+                dispatch({
+                    type: ADD_ANSWER,
+                    answer: answer
+                })
+            })
             .catch((error) => dispatch({type: actiontype.ERROR, error: error, loading: false}));
     }
 
@@ -160,7 +176,9 @@ export default function QuestionEditor() {
                     />
                 </div>
                 <div>
-                    <AnswersGrid answers={state.answers} />
+                    <AnswersGrid answers={state.answers}
+                        addAnswer={addAnswer} 
+                        questionId={questionId} />
                 </div>
                 <div className="row">
                     <React.Fragment>
@@ -178,21 +196,19 @@ export default function QuestionEditor() {
     );
 }
 
-function AnswersGrid({ answers }) {
-    const [sendToUrl, setSendToUrl] = React.useState(false)
-
-    if (sendToUrl) {
-        var targetStr = `/question/get/${sendToUrl}`
-        return <Redirect to={targetStr} />
-    }
-
-    const createAnswer = () => {
-        console.log("Making an answer!")
+function AnswersGrid({answers, addAnswer, questionId}) {
+    const createAnswer = (questionId) => {
+        var newAnswer = {
+            "answerText":"New Answer",
+            "isCorrect":false,
+            "questionId": parseInt(questionId)
+        }
+        addAnswer(newAnswer)
     }
 
     return (
         <React.Fragment>
-            <span onClick={() => createAnswer()}>New Answer</span><br/><br/>
+            <span onClick={() => createAnswer(questionId)}>New Answer</span><br/><br/>
             {answers.map((answer, index) => {
 
                 return (

@@ -62,32 +62,8 @@ export function addQuestionTolist(question, count) {
 }
 
 export function fetchSessionsByUser(userId) {
-    // const endpoint = window.encodeURI(`${apiUrlBase}/get/sessions/${userId}`);
-    // const endpoint = window.encodeURI(`https://api.github.com/users/justincook951/repos?per_page=100`);
-    // return fetch(endpoint)
-    //     .then((res) => res.json())
-    //     .then((data) => {
-    //         console.log(`API Url Base: ${apiUrlBase}`)
-    //         return data;
-    //     })
-    // Emulate fetch for now, without hitting an endpoint
-    let samplePromise = new Promise((resolve, reject) => {
-        setTimeout( function() {
-            resolve([
-                {sessionId: 1, name: 'Session 1', lastAccessed: "2 Days"},
-                {sessionId: 2, name: 'Session 2', lastAccessed: "Today" },
-                {sessionId: 3, name: 'Session 3', lastAccessed: "Today" },
-                {sessionId: 4, name: 'Session 4', lastAccessed: "Today" },
-                {sessionId: 5, name: 'Session 5', lastAccessed: "Today" },
-            ])
-        }, 1000)
-    })
-
-    return samplePromise
-        //.then((res) => res.json())
-        .then((data) => {
-            return data;
-        })
+    const endpoint = `${apiUrlBase}/api/TestSessions`;
+    return performGet(endpoint);
 }
 
 /*
@@ -243,7 +219,6 @@ function performGet(unencodedUri) {
 
 function sendPostRequest(postObject, unencodedUri) {
     const endpoint = window.encodeURI(unencodedUri);
-
     return fetch(endpoint, {
         method: "POST",
         body: JSON.stringify(postObject),

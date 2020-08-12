@@ -89,3 +89,15 @@ export function expireToken() {
     document.cookie="token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
     document.cookie="userObject=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
 }
+
+export function genericFilterOutItem(array, filterVal) {
+    return array.filter(function(element) {
+        return element != filterVal
+    })
+}
+
+export function unixTimestampToLocalDate(timestamp) {
+    let milliseconds = timestamp * 1000
+    let dateObject = new Date(milliseconds)
+    return dateObject.toLocaleString()
+}

@@ -4,6 +4,7 @@ import { fetchSessionsByUser } from '../utils/api'
 import * as actiontype from '../utils/action_types'
 import Loading from './Loading'
 import { Redirect } from 'react-router-dom'
+import { unixTimestampToLocalDate } from '../utils/generic_functions'
 
 function testTakerReducer(state, action) {
     if (action.type === actiontype.SUCCESS) {
@@ -39,15 +40,16 @@ function SessionsGrid({ sessions }) {
             </li>
             <li></li>
             {sessions.map((session, index) => {
-                const { sessionId, name, lastAccessed } = session
+                const { id, topic } = session
+                const lastVisitedTime = unixTimestampToLocalDate(session.lastVisitedTime)
 
                 return (
                     <li 
-                        key={sessionId}
+                        key={id}
                         className='btn-style'
-                        onClick={() => setSendToTest(sessionId)}
+                        onClick={() => setSendToTest(id)}
                     >
-                        {name}: {lastAccessed} ({sessionId})
+                        {topic.topicName}: Last Visited {lastVisitedTime} ({id})
                     </li>
                 )
             })}

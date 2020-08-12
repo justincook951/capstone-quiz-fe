@@ -1,6 +1,6 @@
 import React from 'react'
 import * as actiontype from '../utils/action_types'
-import { updateAnswer } from '../utils/api'
+import { updateAnswer, deleteAnswer } from '../utils/api'
 
 export default function AnswerEditor({ answer }) 
 {
@@ -11,7 +11,9 @@ export default function AnswerEditor({ answer })
     const [answerText, setAnswerText] = React.useState(answer.answerText);
     const [isCorrect, setIsCorrect] = React.useState(answer.isCorrect);
     const callDeleteAnswer = (id) => {
-        console.log(id)
+        deleteAnswer(id)
+        .then(() => window.location.reload())
+        .catch((error) => dispatch({type: actiontype.ERROR, error: error, loading: false}));
     }
 
     const callSaveQuestion = () => {
