@@ -44,25 +44,14 @@ export default function Test() {
     )
     const { sessionId } = useParams();
     // Fetch all questions for a given session for this user
-    if (sessionId === 'new') {
-        React.useEffect(() => {
-            generateNewTest()
-                .then((response) => {
-                    dispatch({ type: actiontype.SUCCESS, state, response })
-                })
-                .catch((err) => console.log(err));
-        }, [questionData])
-    }
-    else {
-        React.useEffect(() => {
-            dispatch({ type:actiontype.RESET })
-            fetchNextQuestionBySession(sessionId)
-                .then((response) => {
-                    dispatch({ type: actiontype.SUCCESS, state, response })
-                })
-                .catch((err) => console.log(err));
-        }, [questionData])
-    }
+    React.useEffect(() => {
+        dispatch({ type:actiontype.RESET })
+        fetchNextQuestionBySession(sessionId)
+            .then((response) => {
+                dispatch({ type: actiontype.SUCCESS, state, response })
+            })
+            .catch((err) => console.log(err));
+    }, [questionData])
 
     const updateTest = (action) => {
         switch (action.type) {
@@ -83,12 +72,12 @@ export default function Test() {
             <MainMenu />
             <hr/>
             <div className='questionsContainer'>
-            {state.error
-                ? <h1>{error}</h1> 
-                : !state.question
-                    ? <Loading text='Getting question' />
-                    : null
-            } 
+                {state.error
+                    ? <h1>{error}</h1> 
+                    : !state.question
+                        ? <Loading text='Getting question' />
+                        : null
+                } 
                 <ul>
                     {state.question
                         ?

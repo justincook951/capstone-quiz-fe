@@ -18,8 +18,6 @@ const UPDATE_DESCRIPTION = "UPDATE_DESCRIPTION"
 function topicReducer(state, action) {
     switch (action.type) {
         case actiontype.SUCCESS:
-            console.log("Calling topicReducer")
-            console.log(action)
             return {
                 ...state, 
                 topicName: action.topicName,

@@ -1,4 +1,4 @@
-const apiUrlBase = "https://capstonequizapi20200705171512.azurewebsites.net";
+const apiUrlBase = "https://localhost:44336";
 var questionsList = [
     {
         questionId: 1, 
@@ -30,9 +30,14 @@ var questionsList = [
 ============================================================
 */
 
-export function generateNewTest() {
-    // Emulate the same material, for now.
-    return fetchNextQuestionBySession("123");
+export function generateNewTest(topicId, userId) {
+    var endpoint = `${apiUrlBase}/api/TestSessions`;
+    var postObject = {
+        "userId": parseInt(userId),
+        "topicId": parseInt(topicId)
+    }
+    console.log(postObject)
+    return sendPostRequest(postObject, endpoint)
 }
 
 export function fetchNextQuestionBySession(sessionId) {
@@ -120,12 +125,10 @@ export function generateNewQuestion(inbtopicId) {
         questionExplanation:"Sample Explanation"
     }
     var postObject = question;
-    console.log(postObject)
     return sendPostRequest(postObject, endpoint)
 }
 
 export function updateQuestion(question) {
-    console.log(question)
     var endpoint = `${apiUrlBase}/api/Questions/${question.id}`;
     var postObject = question;
     return sendPutRequest(postObject, endpoint)
@@ -241,7 +244,6 @@ function sendPutRequest(putObject, unencodedUri) {
     })
         .then(response => {
             if (response.url) {
-                console.log(response)
                 return performGet(response.url)
             }
         else {

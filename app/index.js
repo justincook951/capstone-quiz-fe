@@ -7,7 +7,6 @@ import Home from './components/Home'
 import Demo from './components/Demo'
 import Login from './components/Login'
 import Register from './components/Register'
-import TestMaker from './components/TestMaker'
 import TestTaker from './components/TestTaker'
 import Test from './components/Test'
 import TopicMaker from './components/TopicMaker'
@@ -21,7 +20,6 @@ function authedPaths() {
     return (
         <React.Fragment>
             <Route exact path='/' component={Home} />
-            <Route exact path='/test/create' component={TestMaker} />
             <Route exact path='/test/get' component={TestTaker} />
             <Route path='/test/get/:sessionId' component={Test} />
             <Route exact path='/topic/create' component={TopicMaker} />
