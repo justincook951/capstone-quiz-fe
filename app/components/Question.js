@@ -8,12 +8,11 @@ import CorrectSrc from '../assets/green-check.png'
 import IdkSrc from '../assets/question-mark.png'
 
 export default function Question({ 
-    inbquestionId, 
+    inbsessionQuestionId, 
     inbquestionText, 
     inbquestionExplanation, 
     inbAnswers,
     nextQuestion,
-    nextEnabled,
     onSubmitFunc }
 ){
     
@@ -22,34 +21,30 @@ export default function Question({
     const [displayExplanation, changeDisplayExplanation] = React.useState(false);
     const [displayAnswers, changeDisplayAnswers] = React.useState(false);
     const [arrayShuffled, changeArrayShuffled] = React.useState(false);
-    const [questionId,] = React.useState(inbquestionId);
+    const [sessionQuestionId,] = React.useState(inbsessionQuestionId);
     const [questionText,] = React.useState(inbquestionText);
     const [questionExplanation,] = React.useState(inbquestionExplanation);
     const randomOrderAnswers = React.useRef(shuffleArray(inbAnswers, arrayShuffled, changeArrayShuffled));
+    const [nextEnabled, setNextEnabled] = React.useState(false)
     const checkAnswer = () => {
         changeDisplayAnswers(true);
         changeDisplayExplanation(true);
-        let fullQuestionObj = {
-            questionId: questionId,
-            questionText: questionText,
-            questionExplanation: questionExplanation,
-            answers: displayAnswers
-        }
+        setNextEnabled(true)
         if (newestAnswer.isCorrect && oldestAnswer.isCorrect) {
             // User got the answer correct
-            onSubmitFunc({ type: actiontype.REMOVE, questionId: questionId });
+            onSubmitFunc({ type: actiontype.REMOVE, sessionQuestionId: sessionQuestionId });
         }
         else if (newestAnswer.isCorrect || oldestAnswer.isCorrect) {
             // User got the answer half correct - add to question queue 1x
-            onSubmitFunc({ type: actiontype.REQUEUE, number: 1, question: fullQuestionObj });
+            onSubmitFunc({ type: actiontype.REQUEUE, number: 1, sessionQuestionId: sessionQuestionId });
         }
         else if (newestAnswer.answerId === -1) {
             // User chose "I don't know" - add to question queue 2x
-            onSubmitFunc({ type: actiontype.REQUEUE, number: 2, question: fullQuestionObj });
+            onSubmitFunc({ type: actiontype.REQUEUE, number: 2, sessionQuestionId: sessionQuestionId });
         }
         else {
             // User got the answer completely wrong - add to question queue 3x
-            onSubmitFunc({ type: actiontype.REQUEUE, number: 3, question: fullQuestionObj });
+            onSubmitFunc({ type: actiontype.REQUEUE, number: 3, sessionQuestionId: sessionQuestionId });
         }
     }
     const chooseAnswer = (inbAnswer) => {
@@ -123,7 +118,7 @@ export default function Question({
                         spanClassName = circleFull;
                     }
                     return (
-                        <li key={`q-${questionId}-answer-${answer.answerId}`} >
+                        <li key={`q-${sessionQuestionId}-answer-${answer.id}`} >
 
                             <Answer 
                                 answerText={answer.answerText}
@@ -155,7 +150,7 @@ export default function Question({
                     onClick={checkAnswer}>Submit</button>
                 <button 
                     className="btn btn-style"
-                    onClick={() => nextQuestion(Math.random() * 10)}
+                    onClick={() => nextQuestion()}
                     disabled={!nextEnabled} >Next</button>
             </div>
         </React.Fragment>

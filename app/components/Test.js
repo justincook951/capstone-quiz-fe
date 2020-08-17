@@ -1,6 +1,6 @@
 import React from 'react'
 import Question from './Question'
-import { fetchNextQuestionBySession, generateNewTest, removeQuestionFromList, addQuestionTolist } from '../utils/api'
+import { fetchNextQuestionBySession, generateNewTest, removeQuestionFromList, addQuestionToList } from '../utils/api'
 import * as actiontype from '../utils/action_types'
 import { useParams} from "react-router";
 import MainMenu from './MainMenu';
@@ -37,17 +37,21 @@ function testReducer(state, action) {
 }
 
 export default function Test() {
-    const [questionData, updateQuestionData] = React.useState(3)
+    const [questionData, updateQuestionData] = React.useState(false)
     const [state, dispatch] = React.useReducer(
         testReducer,
         {error: null}
     )
+    const [attemptedQuestions, setAttemptedQuestions] = React.useState(1)
     const { sessionId } = useParams();
     // Fetch all questions for a given session for this user
     React.useEffect(() => {
         dispatch({ type:actiontype.RESET })
         fetchNextQuestionBySession(sessionId)
             .then((response) => {
+                if (response === {}) {
+                    
+                }
                 dispatch({ type: actiontype.SUCCESS, state, response })
             })
             .catch((err) => console.log(err));
@@ -56,14 +60,18 @@ export default function Test() {
     const updateTest = (action) => {
         switch (action.type) {
             case actiontype.REQUEUE:
-                addQuestionTolist(action.question)
+                addQuestionToList(action.sessionQuestionId, action.number)
                 break;
             case actiontype.REMOVE:
-                removeQuestionFromList(action.questionId)
+                removeQuestionFromList(action.sessionQuestionId)
                 break;
             default:
                 throw new Error("Unsupported action call in updateTest")
         }
+    }
+
+    const getNextQuestion = () => {
+        updateQuestionData(!questionData);
     }
 
     let question = (state.question ? state.question : null);
@@ -81,16 +89,15 @@ export default function Test() {
                 <ul>
                     {state.question
                         ?
-                        <React.Fragment key={`fragment-${question.questionId}`}>
-                            <h3>Question Counter Broken</h3>
+                        <React.Fragment key={`fragment-${question.sessionQuestionId}`}>
+                            <h3>{state.totalQuestionCount ? `Question ${attemptedQuestions} of ${state.totalQuestionCount} left` : null}</h3>
                             <li>
                                 <Question 
-                                    inbquestionId={question.questionId}
+                                    inbsessionQuestionId={question.sessionQuestionId}
                                     inbquestionText={question.questionText}
                                     inbquestionExplanation={question.questionExplanation}
                                     inbAnswers={question.answers}
-                                    nextQuestion={updateQuestionData}
-                                    nextEnabled={true}
+                                    nextQuestion={getNextQuestion}
                                     onSubmitFunc={(action) => updateTest(action)}
                                 />
                             </li>

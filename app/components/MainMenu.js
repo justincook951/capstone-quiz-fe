@@ -50,6 +50,14 @@ function MainMenuNav() {
                                 Take A Test
                         </NavLink>
                     </li>
+                    <li>
+                        <NavLink 
+                            to='/reports/get/qperformance' 
+                            className='nav-link'
+                            activeStyle={activeStyle}>
+                                See Past Performance
+                        </NavLink>
+                    </li>
                 </ul>
             </nav>
         )

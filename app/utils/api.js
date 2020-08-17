@@ -1,28 +1,4 @@
-const apiUrlBase = "https://localhost:44336";
-var questionsList = [
-    {
-        questionId: 1, 
-        questionText: "What is your favorite color?", 
-        questionExplanation: "Obviously, No Yellow is the correct answer because I said it was. Duh.", 
-        answers: [
-            {answerId: 1, answerText: "Blue", isCorrect: false},
-            {answerId: 2, answerText: "No, Yellowwwwwww", isCorrect: true},
-            {answerId: 3, answerText: "What?", isCorrect: false},
-            {answerId: 4, answerText: "I don't like Spam", isCorrect: false},
-        ]
-    },
-    {
-        questionId: 2, 
-        questionText: "What is the average air speed velocity of a laden swallow?", 
-        questionExplanation: "Nobody suspects the Spanish Inquisition!", 
-        answers: [
-            {answerId: 1, answerText: "Where did you get the coconuts?", isCorrect: false},
-            {answerId: 2, answerText: "I told them he's already got one", isCorrect: false},
-            {answerId: 3, answerText: "The Spanish Inquisition", isCorrect: true},
-            {answerId: 4, answerText: "'tis but a fleshwound", isCorrect: false},
-        ]
-    },
-]
+const apiUrlBase = "https://capstonequizapi20200705171512.azurewebsites.net";
 
 /*
 ============================================================
@@ -36,34 +12,51 @@ export function generateNewTest(topicId, userId) {
         "userId": parseInt(userId),
         "topicId": parseInt(topicId)
     }
-    console.log(postObject)
     return sendPostRequest(postObject, endpoint)
 }
 
 export function fetchNextQuestionBySession(sessionId) {
-    let samplePromise = new Promise((resolve, reject) => {
-        setTimeout( function() {
-            resolve({question: questionsList[0], questionCount: questionsList.length})
-        }, 1000)
-    });
-
-    return samplePromise
-        //.then((res) => res.json())
-        .then((data) => {
-            return data;
+    let endpoint = `${apiUrlBase}/api/SessionQuestions?sessionId=${sessionId}`;
+    return performGet(endpoint)
+        .then(response => {
+            if (response.length == 0) {
+                return {}
+            }
+            let nextQuestion = response[0].question;
+            nextQuestion.sessionQuestionId = response[0].id;
+            let questionCount = response.length
+            return {
+                question: nextQuestion,
+                questionCount: questionCount
+            };
         })
+    
 }
 
-export function removeQuestionFromList() {
-    // User is only dealing with the first question in the list; just remove index 1
-    questionsList.shift();
+export function removeQuestionFromList(sessionQuestionId) {
+    var endpoint = `${apiUrlBase}/api/SessionQuestions/${sessionQuestionId}?action=answer`;
+    return fetch(endpoint, {
+        method: "PUT",
+        headers: {"Content-type": "application/json; charset=UTF-8"}
+    })
+        .then(r => {
+                return true;
+            }
+        ) 
+        .catch(err => console.log(err));
 }
 
-export function addQuestionTolist(question, count) {
-    // i is 1 because if they need to repeat the question only once, it's already on the list. Just shuffle the results :)
-    for (let i=1; i < count; i++) {
-        questionsList.push(question);
-    }
+export function addQuestionToList(sessionQuestionId, count) {
+    var endpoint = `${apiUrlBase}/api/SessionQuestions/${sessionQuestionId}?action=requeue&count=${count}`;
+    return fetch(endpoint, {
+        method: "PUT",
+        headers: {"Content-type": "application/json; charset=UTF-8"}
+    })
+        .then(r => {
+                return true;
+            }
+        ) 
+        .catch(err => console.log(err));
 }
 
 export function fetchSessionsByUser(userId) {
@@ -164,6 +157,16 @@ export function deleteAnswer(answerId) {
     return sendDeleteRequest(endpoint)
 }
 
+/*
+============================================================
+===================REPORTING FUNCTIONS======================
+============================================================
+*/
+
+export function getQuestionPerformance() {
+    var endpoint = `${apiUrlBase}/api/Answers`;
+    return performGet(endpoint);
+}
 
 /*
 ============================================================
@@ -246,9 +249,10 @@ function sendPutRequest(putObject, unencodedUri) {
             if (response.url) {
                 return performGet(response.url)
             }
-        else {
-            return true;
-        }}) 
+            else {
+                return true;
+            }
+        }) 
         .catch(err => console.log(err));
 }
 

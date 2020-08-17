@@ -26,15 +26,6 @@ function testTakerReducer(state, action) {
     }
 }
 
-function validateTopicEligible(topic) {
-    let isValidForTest = false;
-    if (topic.questions.length < 2) {
-        return isValidForTest;
-    }
-    isValidForTest = true;
-    return isValidForTest;
-}
-
 function SessionsGrid({ sessions }) {
     const [sendToTest, setSendToTest] = React.useState(false);
     const [topics, setTopics] = React.useState([]);
@@ -47,13 +38,11 @@ function SessionsGrid({ sessions }) {
                 let topicsList = [];
                 response.forEach(element => {
                     // Fill "Select" object
-                    if (validateTopicEligible(element)) {
-                        let newObj = {
-                            "label": `${element.topicName} : ${element.id}`,
-                            "value": element.id
-                        };
-                        topicsList.push(newObj)
-                    }
+                    let newObj = {
+                        "label": `${element.topicName} : ${element.id}`,
+                        "value": element.id
+                    };
+                    topicsList.push(newObj)
                 });
                 setTopics(topicsList)
             })
@@ -106,7 +95,7 @@ function SessionsGrid({ sessions }) {
                         className='btn-style'
                         onClick={() => setSendToTest(id)}
                     >
-                        {topic.topicName}: Last Visited {lastVisitedTime} ({id})
+                        {topic.topicName}: Created {lastVisitedTime} ({id})
                     </li>
                 )
             })}
