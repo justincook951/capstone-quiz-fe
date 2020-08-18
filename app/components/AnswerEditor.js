@@ -1,6 +1,8 @@
 import React from 'react'
 import * as actiontype from '../utils/action_types'
 import { updateAnswer, deleteAnswer } from '../utils/api'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPencilAlt, faTrash, faCheck, faBan } from '@fortawesome/free-solid-svg-icons'
 
 export default function AnswerEditor({ answer }) 
 {
@@ -56,17 +58,17 @@ export default function AnswerEditor({ answer })
                             onChange={() => setIsCorrect(!isCorrect)}
                         />
                         <br/>
-                        <span onClick={() => callSaveQuestion()}>Save</span>
+                        <span onClick={() => callSaveQuestion()}><FontAwesomeIcon icon={faCheck} className="icon-hover"/> </span>
                         <span onClick={() => {
                             setAnswerText(initialAnswerText)
                             setEditMode(false)
-                        }}>Cancel</span>
+                        }}><FontAwesomeIcon icon={faBan} className="icon-hover"/></span>
                 </div>
                     </div>
                 : 
                     <div>
-                        <span onClick={() => setEditMode(true)}>Edit </span>
-                        <span onClick={() => callDeleteAnswer(id)}>Delete </span>
+                        <span onClick={() => setEditMode(true)}><FontAwesomeIcon icon={faPencilAlt} className="icon-hover"/> </span>
+                        <span onClick={() => callDeleteAnswer(id)}><FontAwesomeIcon icon={faTrash} className="icon-hover"/> </span>
                         <p>{answerText}: ({id}) - {isCorrect ? "Correct" : "Incorrect"}</p>
                     </div>
             }

@@ -6,6 +6,7 @@ import Loading from './Loading'
 import { Redirect } from 'react-router-dom'
 import { unixTimestampToLocalDate } from '../utils/generic_functions'
 import Select from 'react-select';
+import Tooltip from './Tooltip'
 
 function testTakerReducer(state, action) {
     if (action.type === actiontype.SUCCESS) {
@@ -90,12 +91,15 @@ function SessionsGrid({ sessions }) {
                 const lastVisitedTime = unixTimestampToLocalDate(session.lastVisitedTime)
 
                 return (
+                    
                     <li 
                         key={id}
                         className='btn-style'
                         onClick={() => setSendToTest(id)}
                     >
-                        {topic.topicName}: Created {lastVisitedTime} ({id})
+                        <Tooltip text={`Created ${lastVisitedTime}`}>
+                            {topic.topicName.length > 20 ? `${topic.topicName.substring(0, 17)}...`  : topic.topicName}
+                        </Tooltip>
                     </li>
                 )
             })}

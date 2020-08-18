@@ -5,7 +5,8 @@ import * as actiontype from '../utils/action_types'
 import Loading from './Loading'
 import { useParams, Redirect } from "react-router";
 import AnswerEditor from './AnswerEditor'
-import { genericFilterOutItem } from '../utils/generic_functions'
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const initialState = {
     loading: false,
@@ -208,7 +209,7 @@ function AnswersGrid({answers, addAnswer, questionId}) {
 
     return (
         <React.Fragment>
-            <span onClick={() => createAnswer(questionId)}>New Answer</span><br/><br/>
+            <span className="icon-hover" onClick={() => createAnswer(questionId)}><FontAwesomeIcon icon={faPlusCircle} /> Add Answer</span><br/><br/>
             {answers.map((answer, index) => {
 
                 return (

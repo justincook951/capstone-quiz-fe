@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css'
 import { BrowserRouter as Router, Route, Switch, NavLink, Link } from 'react-router-dom'
 import Loading from './components/Loading'

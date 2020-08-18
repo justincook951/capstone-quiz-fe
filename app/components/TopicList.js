@@ -43,7 +43,7 @@ function TopicsGrid({ topics }) {
                         className='btn-style'
                         onClick={() => setSendToTopic(id)}
                     >
-                        {topicName}: ({id})
+                        {topicName.length > 20 ? `${topicName.substring(0, 17)}...`  : topicName}: ({id})
                     </li>
                 )
             })}

@@ -4,6 +4,8 @@ import { updateTopic, fetchTopicById, deleteQuestion, generateNewQuestion } from
 import * as actiontype from '../utils/action_types'
 import Loading from './Loading'
 import { useParams, Redirect } from "react-router";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlusCircle, faPencilAlt, faTrash } from '@fortawesome/free-solid-svg-icons'
 
 const initialState = {
     loading: false,
@@ -173,7 +175,8 @@ function QuestionsGrid({ questions, inbtopicId }) {
 
     return (
         <React.Fragment>
-            <span onClick={() => createQuestion()}>New Question</span><br/><br/>
+            <p>Questions:</p>
+            <span className="icon-hover" onClick={() => createQuestion()}><FontAwesomeIcon icon={faPlusCircle} /> Add Question</span><br/><br/>
             {questions.map((question, index) => {
                 const { id, questionText } = question
 
@@ -182,8 +185,8 @@ function QuestionsGrid({ questions, inbtopicId }) {
                         key={id}
                         className="edit-link-rows"
                     >
-                        <span onClick={() => setSendToUrl(id)}>Edit </span>
-                        <span onClick={() => deleteQuestionCall(id)}>Delete </span>
+                        <span onClick={() => setSendToUrl(id)}><FontAwesomeIcon icon={faPencilAlt} className="icon-hover"/> </span>
+                        <span onClick={() => deleteQuestionCall(id)}><FontAwesomeIcon icon={faTrash} className="icon-hover"/> </span>
                         {questionText}: ({id})
                     </li>
                 )

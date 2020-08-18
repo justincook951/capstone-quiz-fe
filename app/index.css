@@ -258,9 +258,14 @@ li {
 }
 
 .edit-link-rows:nth-child(even){
-    background: gray;
+    background: #d6dbdc;
 }
 
 .edit-link-rows:nth-child(odd){
-    background: white;
+    background: #e1e7e8;
+}
+
+.icon-hover:hover {
+    color: gray;
+    cursor: pointer;
 }
