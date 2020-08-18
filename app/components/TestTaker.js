@@ -27,6 +27,15 @@ function testTakerReducer(state, action) {
     }
 }
 
+function validateTopicEligible(topic) {
+    let isValidForTest = false;
+    if (topic.questions.length < 2) {
+        return isValidForTest;
+    }
+    isValidForTest = true;
+    return isValidForTest;
+}
+
 function SessionsGrid({ sessions }) {
     const [sendToTest, setSendToTest] = React.useState(false);
     const [topics, setTopics] = React.useState([]);
@@ -38,12 +47,14 @@ function SessionsGrid({ sessions }) {
             .then((response) => {
                 let topicsList = [];
                 response.forEach(element => {
-                    // Fill "Select" object
-                    let newObj = {
-                        "label": `${element.topicName} : ${element.id}`,
-                        "value": element.id
-                    };
-                    topicsList.push(newObj)
+                    if (validateTopicEligible(element)) {
+                        // Fill "Select" object
+                        let newObj = {
+                            "label": `${element.topicName} : ${element.id}`,
+                            "value": element.id
+                        };
+                        topicsList.push(newObj)
+                    }   
                 });
                 setTopics(topicsList)
             })

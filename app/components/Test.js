@@ -13,28 +13,30 @@ function testReducer(state, action) {
             return {
                 error: null,
                 question: action.response.question,
-                totalQuestionCount: action.response.questionCount
+                totalQuestionCount: action.response.questionCount,
+                testComplete: false
             }
-            // Semantic deliciousness
-            break;
-        case actiontype.FAILURE:
+        case actiontype.RESET:
             return {
-            
+                error: null,
+                testComplete: false
             }
-            break;
         case actiontype.ERROR:
             return {
 
             }
-            break;
-        case actiontype.RESET:
+        case TEST_COMPLETE:
             return {
-                error: null
+                error: null,
+                question: null,
+                testComplete: true
             }
         default:
             throw new Error(`Action Type ${action.type} not implemented`);
     }
 }
+
+const TEST_COMPLETE = "TEST_COMPLETE"
 
 export default function Test() {
     const [questionData, updateQuestionData] = React.useState(false)
@@ -49,10 +51,12 @@ export default function Test() {
         dispatch({ type:actiontype.RESET })
         fetchNextQuestionBySession(sessionId)
             .then((response) => {
-                if (response === {}) {
-                    
+                if (JSON.stringify(response) === "{}") {
+                    dispatch({ type: TEST_COMPLETE, state, response })
                 }
-                dispatch({ type: actiontype.SUCCESS, state, response })
+                else {
+                    dispatch({ type: actiontype.SUCCESS, state, response })
+                }
             })
             .catch((err) => console.log(err));
     }, [questionData])
@@ -82,7 +86,7 @@ export default function Test() {
             <div className='questionsContainer'>
                 {state.error
                     ? <h1>{error}</h1> 
-                    : !state.question
+                    : !state.question && !state.testComplete
                         ? <Loading text='Getting question' />
                         : null
                 } 
@@ -102,7 +106,9 @@ export default function Test() {
                                 />
                             </li>
                         </React.Fragment>
-                        : null
+                        : state.testComplete
+                            ? <p>Congratulations! You finished your test!</p>
+                            : null
                     }
                 </ul>
             </div>

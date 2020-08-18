@@ -164,7 +164,7 @@ export function deleteAnswer(answerId) {
 */
 
 export function getQuestionPerformance() {
-    var endpoint = `${apiUrlBase}/api/Answers`;
+    var endpoint = `${apiUrlBase}/api/reports/questionperformance`;
     return performGet(endpoint);
 }
 

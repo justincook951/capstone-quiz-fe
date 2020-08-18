@@ -2,29 +2,42 @@ import React from 'react'
 import MainMenu from './MainMenu';
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
+import * as actiontype from '../utils/action_types'
+import { getQuestionPerformance } from '../utils/api';
+import Loading from './Loading';
+
+function questionPerformanceReducer(state, action) {
+  if (action.type === actiontype.SUCCESS) {
+      return {
+          error: null,
+          results: action.response
+      }
+  }
+  else if (action.type === actiontype.FAILURE) {
+      return {
+          
+      }
+  }
+  else if (action.type === actiontype.ERROR) {
+      return {
+
+      }
+  }
+}
 
 export default function QuestionPerformance() {
 
-    const products = [
-        {
-            'topicName': 'Ayy what',
-            'questionText': 'What would you like to do??',
-            'correctAttempts': 123,
-            'incorrectAttempts': 555
-        },
-        {
-          'topicName': 'Ayy what',
-          'questionText': 'Somethin else here',
-          'correctAttempts': 3,
-          'incorrectAttempts': 6 
-      },
-      {
-        'topicName': 'New Topic',
-        'questionText': 'Haahahaha',
-        'correctAttempts': 0,
-        'incorrectAttempts': 50000 
-    }
-    ]
+  const [state, dispatch] = React.useReducer(
+      questionPerformanceReducer,
+      {error: null}
+  )
+  React.useEffect(() => {
+    getQuestionPerformance()
+          .then((response) => {
+              dispatch({ type: actiontype.SUCCESS, state, response })
+          })
+          .catch((err) => dispatch({ type: actiontype.ERROR, err }));
+  }, [])
 
     const columns = [{
         dataField: 'topicName',
@@ -50,14 +63,18 @@ export default function QuestionPerformance() {
     return (
         <div>
             <MainMenu />
-            <p>Question Performance</p>
-            <BootstrapTable 
-                keyField='id' 
-                data={ products } 
-                columns={ columns } 
-                filter={ filterFactory() } 
-                striped  
+            <hr/>
+            {state.results
+              ? 
+                <BootstrapTable 
+                  keyField='id' 
+                  data={ state.results } 
+                  columns={ columns } 
+                  filter={ filterFactory() } 
+                  striped  
                 />
+              : <Loading text="Confetchulating your result-o-tron" />}
+           
         </div>
     );
 
