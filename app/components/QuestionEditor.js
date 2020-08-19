@@ -65,7 +65,7 @@ export default function QuestionEditor() {
         questionEditorReducer,
         initialState
     )
-
+    const [sendToUrl, setSendToUrl] = React.useState(false)
     const { questionId } = useParams();
 
     React.useEffect(() => {
@@ -93,8 +93,6 @@ export default function QuestionEditor() {
         } 
     }, [questionId])
 
-    const [sendToUrl, setSendToUrl] = React.useState(false)
-
     if (sendToUrl) {
         var targetStr = `/topic/get/${sendToUrl}`
         return <Redirect to={targetStr} />
@@ -116,6 +114,7 @@ export default function QuestionEditor() {
                     topicName: apiResponse.topicName,
                     answers: apiResponse.answers
                 }))
+            .then((res) => setSendToUrl(state.topicId))
             .catch((error) => dispatch({type: actiontype.ERROR, error: error, loading: false}));
     }
 

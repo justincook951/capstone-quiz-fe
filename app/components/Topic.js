@@ -87,6 +87,7 @@ export default function Topic() {
                     questions: apiResponse.questions,
                     loading: false
                 }))
+            .then((res) => setReturnToList(true))
             .catch((error) => dispatch({type: actiontype.ERROR, error: error, loading: false}));
     }
 
@@ -187,7 +188,7 @@ function QuestionsGrid({ questions, inbtopicId }) {
                     >
                         <span onClick={() => setSendToUrl(id)}><FontAwesomeIcon icon={faPencilAlt} className="icon-hover"/> </span>
                         <span onClick={() => deleteQuestionCall(id)}><FontAwesomeIcon icon={faTrash} className="icon-hover"/> </span>
-                        {questionText}: ({id})
+                        {questionText}
                     </li>
                 )
             })}

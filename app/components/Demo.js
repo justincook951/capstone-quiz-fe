@@ -4,10 +4,9 @@ import { NavLink } from 'react-router-dom'
 export default function Demo() {
     return (
         <div>
-            <h1>This is the demo page!</h1>
             <NavLink 
-                to='/test/create' 
-                className='nav-link'>This is a broken link</NavLink>
+                to='/login' 
+                className='nav-link'>Please log in to continue.</NavLink>
         </div>
     )
 }

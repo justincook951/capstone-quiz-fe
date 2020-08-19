@@ -4,6 +4,7 @@ import { fetchTopicsByUser } from '../utils/api'
 import * as actiontype from '../utils/action_types'
 import Loading from './Loading'
 import { Redirect } from 'react-router-dom'
+import Tooltip from './Tooltip'
 
 function topicListReducer(state, action) {
     if (action.type === actiontype.SUCCESS) {
@@ -38,12 +39,15 @@ function TopicsGrid({ topics }) {
                 const { id, topicName } = topic
 
                 return (
+                    
                     <li 
                         key={id}
                         className='btn-style'
                         onClick={() => setSendToTopic(id)}
                     >
-                        {topicName.length > 20 ? `${topicName.substring(0, 17)}...`  : topicName}: ({id})
+                        <Tooltip text={`${topicName}`}>
+                            {topicName.length > 30 ? `${topicName.substring(0, 27)}...`  : topicName}
+                        </Tooltip>
                     </li>
                 )
             })}

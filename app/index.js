@@ -20,7 +20,7 @@ import QuestionPerformance from './components/QuestionPerformance'
 
 function authedPaths() {
     return (
-        <React.Fragment>
+        <Switch>
             <Route exact path='/' component={Home} />
             <Route exact path='/test/get' component={TestTaker} />
             <Route path='/test/get/:sessionId' component={Test} />
@@ -29,20 +29,22 @@ function authedPaths() {
             <Route path='/topic/get/:topicId' component={Topic} />
             <Route path='/question/get/:questionId' component={QuestionEditor} />
             <Route path='/reports/get/qperformance' component={QuestionPerformance} />
-        </React.Fragment>
+            <Route path='*' component={NotFound} />
+        </Switch>
     )
 }
 
 function notAuthedPaths(setAuthed) {
     return (
-        <React.Fragment>
+        <Switch>
             <Route exact path='/' component={Demo} />
             <Route exact path='/login' >
                 <Login 
                     authedFunc={(newVal) => setAuthed(newVal)} />
             </Route>
             <Route exact path='/register' component={Register} />
-        </React.Fragment>
+            <Route path='*' component={NotFound} />
+        </Switch>
     )
 }
 
@@ -93,16 +95,10 @@ function App()  {
                 </div>
                 <h3><i>Learning, made better</i></h3>
                 <hr/>
-                <React.Suspense fallback={<Loading/>} >
-                    <Switch>
-                        {authed === true 
-                            ? authedPaths()
-                            : notAuthedPaths(setAuthed)
-                        }
-                        
-                        <Route path='*' component={NotFound} />
-                    </Switch>                        
-                </React.Suspense>
+                {authed === true 
+                    ? authedPaths()
+                    : notAuthedPaths(setAuthed)
+                }
             </Router>
         </div>
     )

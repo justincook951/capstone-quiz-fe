@@ -69,7 +69,7 @@ export default function AnswerEditor({ answer })
                     <div>
                         <span onClick={() => setEditMode(true)}><FontAwesomeIcon icon={faPencilAlt} className="icon-hover"/> </span>
                         <span onClick={() => callDeleteAnswer(id)}><FontAwesomeIcon icon={faTrash} className="icon-hover"/> </span>
-                        <p>{answerText}: ({id}) - {isCorrect ? "Correct" : "Incorrect"}</p>
+                        <p>{answerText} - {isCorrect ? "Correct" : "Incorrect"}</p>
                     </div>
             }
         </li>

@@ -4,7 +4,7 @@ import { fetchSessionsByUser, fetchTopicsByUser, generateNewTest } from '../util
 import * as actiontype from '../utils/action_types'
 import Loading from './Loading'
 import { Redirect } from 'react-router-dom'
-import { unixTimestampToLocalDate } from '../utils/generic_functions'
+import { unixTimestampToLocalDate, getUserData } from '../utils/generic_functions'
 import Select from 'react-select';
 import Tooltip from './Tooltip'
 
@@ -41,6 +41,7 @@ function SessionsGrid({ sessions }) {
     const [topics, setTopics] = React.useState([]);
     const [showTopics, setShowTopics] = React.useState(false);
     const [selectedTopic, setSelectedTopic] = React.useState(false);
+    const [userId,] = React.useState(getUserData("id"))
 
     React.useEffect(() => {
         fetchTopicsByUser()
@@ -50,7 +51,7 @@ function SessionsGrid({ sessions }) {
                     if (validateTopicEligible(element)) {
                         // Fill "Select" object
                         let newObj = {
-                            "label": `${element.topicName} : ${element.id}`,
+                            "label": element.topicName,
                             "value": element.id
                         };
                         topicsList.push(newObj)
@@ -62,7 +63,7 @@ function SessionsGrid({ sessions }) {
     }, [])
 
     const startNewTest = () => {
-        generateNewTest(selectedTopic.value, 5)
+        generateNewTest(selectedTopic.value, userId)
             .then((response) => {
                 setSendToTest(response.id)
             })
