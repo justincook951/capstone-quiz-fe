@@ -98,6 +98,12 @@ export function updateTopic(topic) {
     return sendPutRequest(postObject, endpoint)
 }
 
+export function performDeleteTopic(topicId) {
+    var endpoint = `${apiUrlBase}/api/Topics/${topicId}`;
+
+    return sendDeleteRequest(endpoint)
+}
+
 /*
 ============================================================
 ===============QUESTION MANAGEMENT FUNCTIONS================

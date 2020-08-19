@@ -1,6 +1,6 @@
 import React from 'react'
 import MainMenu from './MainMenu'
-import { updateTopic, fetchTopicById, deleteQuestion, generateNewQuestion } from '../utils/api'
+import { updateTopic, fetchTopicById, deleteQuestion, generateNewQuestion, performDeleteTopic } from '../utils/api'
 import * as actiontype from '../utils/action_types'
 import Loading from './Loading'
 import { useParams, Redirect } from "react-router";
@@ -91,6 +91,11 @@ export default function Topic() {
             .catch((error) => dispatch({type: actiontype.ERROR, error: error, loading: false}));
     }
 
+    const deleteTopic = () => {
+        performDeleteTopic(parseInt(topicId))
+            .then((res) => setReturnToList(true))
+    }
+
     if (state.loading === true) {
         return <div><Loading text="Combobulizing the Crazlars" /></div>
     }
@@ -148,6 +153,9 @@ export default function Topic() {
                         <button 
                             className="btn btn-style"
                             onClick={() => setReturnToList(true)}>Cancel</button>
+                        <button 
+                            className="btn btn-danger"
+                            onClick={deleteTopic}>Delete</button>
                     </React.Fragment>
                 </div>
             </div>
